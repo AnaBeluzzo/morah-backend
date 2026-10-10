@@ -1,27 +1,27 @@
 package br.com.morah.service;
 
-import br.com.morah.dto.Disponibilidade;
-import br.com.morah.dto.HorarioDisponivel;
-import br.com.morah.dto.MomentoVistoria;
-import br.com.morah.dto.PageMetadata;
-import br.com.morah.dto.Perfil;
-import br.com.morah.dto.ReservaCreateRequest;
-import br.com.morah.dto.ReservaPage;
-import br.com.morah.dto.StatusOcorrencia;
-import br.com.morah.dto.StatusReserva;
-import br.com.morah.dto.VistoriaRequest;
+import br.com.morah.dto.comum.PageMetadata;
+import br.com.morah.dto.encomendas.StatusOcorrencia;
+import br.com.morah.dto.login.Perfil;
+import br.com.morah.dto.reservas.Disponibilidade;
+import br.com.morah.dto.reservas.HorarioDisponivel;
+import br.com.morah.dto.reservas.MomentoVistoria;
+import br.com.morah.dto.reservas.ReservaCreateRequest;
+import br.com.morah.dto.reservas.ReservaPage;
+import br.com.morah.dto.reservas.StatusReserva;
+import br.com.morah.dto.reservas.VistoriaRequest;
 import br.com.morah.exception.ApiException;
-import br.com.morah.model.AreaComum;
-import br.com.morah.model.Ocorrencia;
-import br.com.morah.model.Reserva;
-import br.com.morah.model.Vistoria;
-import br.com.morah.pattern.NotificacaoReserva;
-import br.com.morah.repository.AreaComumRepository;
-import br.com.morah.repository.OcorrenciaRepository;
-import br.com.morah.repository.PessoaRepository;
-import br.com.morah.repository.ReservaRepository;
-import br.com.morah.repository.UnidadeRepository;
-import br.com.morah.repository.VistoriaRepository;
+import br.com.morah.model.encomendas.Ocorrencia;
+import br.com.morah.model.reservas.AreaComum;
+import br.com.morah.model.reservas.Reserva;
+import br.com.morah.model.reservas.Vistoria;
+import br.com.morah.pattern.templatemethod.notificacao.NotificacaoReserva;
+import br.com.morah.repository.condominio.UnidadeRepository;
+import br.com.morah.repository.encomendas.OcorrenciaRepository;
+import br.com.morah.repository.login.PessoaRepository;
+import br.com.morah.repository.reservas.AreaComumRepository;
+import br.com.morah.repository.reservas.ReservaRepository;
+import br.com.morah.repository.reservas.VistoriaRepository;
 import br.com.morah.security.UsuarioLogado;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,9 +63,9 @@ public class ReservaService {
     }
 
     @Transactional(readOnly = true)
-    public List<br.com.morah.dto.AreaComum> buscarAreasComuns(UsuarioLogado usuario) {
+    public List<br.com.morah.dto.reservas.AreaComum> buscarAreasComuns(UsuarioLogado usuario) {
         return areaComumRepository.findByCondominioIdOrderById(usuario.condominioId()).stream()
-                .map(br.com.morah.dto.AreaComum::de)
+                .map(br.com.morah.dto.reservas.AreaComum::de)
                 .toList();
     }
 
@@ -99,13 +99,13 @@ public class ReservaService {
 
         Page<Reserva> pagina = reservaRepository.buscarComFiltros(usuario.condominioId(), unidadeId, inicio, fim,
                 PageRequest.of(page, size));
-        return new ReservaPage(pagina.getContent().stream().map(br.com.morah.dto.Reserva::de).toList(),
+        return new ReservaPage(pagina.getContent().stream().map(br.com.morah.dto.reservas.Reserva::de).toList(),
                 PageMetadata.de(pagina));
     }
 
     /** Nasce confirmada, com valor = taxa da área; unidade e solicitante vêm do token. */
     @Transactional
-    public br.com.morah.dto.Reserva criarReserva(UsuarioLogado usuario, ReservaCreateRequest request) {
+    public br.com.morah.dto.reservas.Reserva criarReserva(UsuarioLogado usuario, ReservaCreateRequest request) {
         AreaComum area = buscarArea(usuario, request.areaComumId());
         if (reservaRepository.existsByAreaComumIdAndStatusAndInicioLessThanAndFimGreaterThan(
                 area.getId(), StatusReserva.CONFIRMADA, request.fim(), request.inicio())) {
@@ -123,28 +123,28 @@ public class ReservaService {
         reservaRepository.save(reserva);
 
         notificacaoReserva.notificar(reserva, List.of(reserva.getSolicitante()));
-        return br.com.morah.dto.Reserva.de(reserva);
+        return br.com.morah.dto.reservas.Reserva.de(reserva);
     }
 
     @Transactional(readOnly = true)
-    public br.com.morah.dto.Reserva buscarReserva(UsuarioLogado usuario, Long reservaId) {
-        return br.com.morah.dto.Reserva.de(buscarDoCondominio(usuario, reservaId));
+    public br.com.morah.dto.reservas.Reserva buscarReserva(UsuarioLogado usuario, Long reservaId) {
+        return br.com.morah.dto.reservas.Reserva.de(buscarDoCondominio(usuario, reservaId));
     }
 
     /** A reserva não é apagada: passa a "cancelada". */
     @Transactional
-    public br.com.morah.dto.Reserva deletarReserva(UsuarioLogado usuario, Long reservaId) {
+    public br.com.morah.dto.reservas.Reserva deletarReserva(UsuarioLogado usuario, Long reservaId) {
         Reserva reserva = buscarDoCondominio(usuario, reservaId);
         if (reserva.getStatus() != StatusReserva.CONFIRMADA) {
             throw ApiException.conflito("A reserva não está mais confirmada");
         }
         reserva.setStatus(StatusReserva.CANCELADA);
-        return br.com.morah.dto.Reserva.de(reserva);
+        return br.com.morah.dto.reservas.Reserva.de(reserva);
     }
 
     /** Dano gera ocorrência aberta; vistoria de saída conclui a reserva. */
     @Transactional
-    public br.com.morah.dto.Reserva registrarVistoria(UsuarioLogado usuario, Long reservaId, VistoriaRequest request) {
+    public br.com.morah.dto.reservas.Reserva registrarVistoria(UsuarioLogado usuario, Long reservaId, VistoriaRequest request) {
         Reserva reserva = buscarDoCondominio(usuario, reservaId);
         boolean dano = Boolean.TRUE.equals(request.dano());
 
@@ -172,7 +172,7 @@ public class ReservaService {
         if (request.momento() == MomentoVistoria.SAIDA) {
             reserva.setStatus(StatusReserva.CONCLUIDA);
         }
-        return br.com.morah.dto.Reserva.de(reserva);
+        return br.com.morah.dto.reservas.Reserva.de(reserva);
     }
 
     /** Converte "data + hora cheia" (fuso do servidor) em instante. */

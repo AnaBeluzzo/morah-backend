@@ -1,27 +1,27 @@
 package br.com.morah.service;
 
-import br.com.morah.dto.AcessoCreateRequest;
-import br.com.morah.dto.AcessoPage;
-import br.com.morah.dto.AutorizacaoVisitaCreateRequest;
-import br.com.morah.dto.AutorizacaoVisitaPage;
-import br.com.morah.dto.DecisaoAutorizacao;
-import br.com.morah.dto.DecisaoAutorizacaoRequest;
-import br.com.morah.dto.PageMetadata;
-import br.com.morah.dto.StatusAcesso;
-import br.com.morah.dto.StatusAutorizacaoVisita;
-import br.com.morah.dto.TipoAcesso;
+import br.com.morah.dto.comum.PageMetadata;
+import br.com.morah.dto.portaria.AcessoCreateRequest;
+import br.com.morah.dto.portaria.AcessoPage;
+import br.com.morah.dto.portaria.AutorizacaoVisitaCreateRequest;
+import br.com.morah.dto.portaria.AutorizacaoVisitaPage;
+import br.com.morah.dto.portaria.DecisaoAutorizacao;
+import br.com.morah.dto.portaria.DecisaoAutorizacaoRequest;
+import br.com.morah.dto.portaria.StatusAcesso;
+import br.com.morah.dto.portaria.StatusAutorizacaoVisita;
+import br.com.morah.dto.portaria.TipoAcesso;
 import br.com.morah.exception.ApiException;
-import br.com.morah.model.Acesso;
-import br.com.morah.model.AutorizacaoVisita;
-import br.com.morah.model.Unidade;
-import br.com.morah.model.Visitante;
-import br.com.morah.pattern.NotificacaoVisitante;
-import br.com.morah.repository.AcessoRepository;
-import br.com.morah.repository.AutorizacaoVisitaRepository;
-import br.com.morah.repository.CondominioRepository;
-import br.com.morah.repository.PessoaPerfilRepository;
-import br.com.morah.repository.UnidadeRepository;
-import br.com.morah.repository.VisitanteRepository;
+import br.com.morah.model.condominio.Unidade;
+import br.com.morah.model.portaria.Acesso;
+import br.com.morah.model.portaria.AutorizacaoVisita;
+import br.com.morah.model.portaria.Visitante;
+import br.com.morah.pattern.templatemethod.notificacao.NotificacaoVisitante;
+import br.com.morah.repository.condominio.CondominioRepository;
+import br.com.morah.repository.condominio.UnidadeRepository;
+import br.com.morah.repository.login.PessoaPerfilRepository;
+import br.com.morah.repository.portaria.AcessoRepository;
+import br.com.morah.repository.portaria.AutorizacaoVisitaRepository;
+import br.com.morah.repository.portaria.VisitanteRepository;
 import br.com.morah.security.UsuarioLogado;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,7 +59,7 @@ public class PortariaService {
 
     /** Cria o visitante e a autorização pendente, e avisa os moradores da unidade. */
     @Transactional
-    public br.com.morah.dto.AutorizacaoVisita registrarVisitante(UsuarioLogado usuario, AutorizacaoVisitaCreateRequest request) {
+    public br.com.morah.dto.portaria.AutorizacaoVisita registrarVisitante(UsuarioLogado usuario, AutorizacaoVisitaCreateRequest request) {
         Unidade unidade = unidadeRepository.findByIdAndBlocoCondominioId(request.unidadeId(), usuario.condominioId())
                 .orElseThrow(() -> ApiException.naoEncontrado("Unidade não encontrada"));
 
@@ -79,7 +79,7 @@ public class PortariaService {
         autorizacaoVisitaRepository.save(autorizacao);
 
         notificacaoVisitante.notificar(autorizacao, pessoaPerfilRepository.findMoradoresByUnidadeId(unidade.getId()));
-        return br.com.morah.dto.AutorizacaoVisita.de(autorizacao);
+        return br.com.morah.dto.portaria.AutorizacaoVisita.de(autorizacao);
     }
 
     /** Portaria vê as do condomínio; morador/proprietário só as da própria unidade. */
@@ -95,18 +95,18 @@ public class PortariaService {
 
         Page<AutorizacaoVisita> pagina = autorizacaoVisitaRepository.buscarComFiltros(usuario.condominioId(), unidadeId,
                 statusGravado, solicitadoAntesDe, solicitadoAPartirDe, PageRequest.of(page, size));
-        return new AutorizacaoVisitaPage(pagina.getContent().stream().map(br.com.morah.dto.AutorizacaoVisita::de).toList(),
+        return new AutorizacaoVisitaPage(pagina.getContent().stream().map(br.com.morah.dto.portaria.AutorizacaoVisita::de).toList(),
                 PageMetadata.de(pagina));
     }
 
     @Transactional(readOnly = true)
-    public br.com.morah.dto.AutorizacaoVisita buscarAutorizacao(UsuarioLogado usuario, Long autorizacaoId) {
-        return br.com.morah.dto.AutorizacaoVisita.de(buscarAutorizacaoPermitida(usuario, autorizacaoId));
+    public br.com.morah.dto.portaria.AutorizacaoVisita buscarAutorizacao(UsuarioLogado usuario, Long autorizacaoId) {
+        return br.com.morah.dto.portaria.AutorizacaoVisita.de(buscarAutorizacaoPermitida(usuario, autorizacaoId));
     }
 
     /** Só a unidade da autorização decide; expirada ou já decidida → 409. */
     @Transactional
-    public br.com.morah.dto.AutorizacaoVisita decidirAutorizacao(UsuarioLogado usuario, Long autorizacaoId,
+    public br.com.morah.dto.portaria.AutorizacaoVisita decidirAutorizacao(UsuarioLogado usuario, Long autorizacaoId,
                                                                  DecisaoAutorizacaoRequest request) {
         AutorizacaoVisita autorizacao = buscarAutorizacaoPermitida(usuario, autorizacaoId);
         StatusAutorizacaoVisita atual = autorizacao.calcularStatus();
@@ -119,7 +119,7 @@ public class PortariaService {
         autorizacao.setStatus(request.decisao() == DecisaoAutorizacao.AUTORIZADO
                 ? StatusAutorizacaoVisita.AUTORIZADA : StatusAutorizacaoVisita.RECUSADA);
         autorizacao.setRespondidoEm(Instant.now());
-        return br.com.morah.dto.AutorizacaoVisita.de(autorizacao);
+        return br.com.morah.dto.portaria.AutorizacaoVisita.de(autorizacao);
     }
 
     @Transactional
@@ -138,12 +138,12 @@ public class PortariaService {
         Instant inicio = data == null ? null : data.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Instant fim = data == null ? null : data.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
         Page<Acesso> pagina = acessoRepository.buscarDoCondominio(usuario.condominioId(), inicio, fim, PageRequest.of(page, size));
-        return new AcessoPage(pagina.getContent().stream().map(br.com.morah.dto.Acesso::de).toList(), PageMetadata.de(pagina));
+        return new AcessoPage(pagina.getContent().stream().map(br.com.morah.dto.portaria.Acesso::de).toList(), PageMetadata.de(pagina));
     }
 
     /** "entrada" abre um acesso; "saida" fecha o último acesso aberto do visitante. */
     @Transactional
-    public br.com.morah.dto.Acesso registrarAcesso(UsuarioLogado usuario, AcessoCreateRequest request) {
+    public br.com.morah.dto.portaria.Acesso registrarAcesso(UsuarioLogado usuario, AcessoCreateRequest request) {
         Visitante visitante = visitanteRepository.findByIdAndCondominioId(request.visitanteId(), usuario.condominioId())
                 .orElseThrow(() -> ApiException.naoEncontrado("Visitante não encontrado"));
 
@@ -153,7 +153,7 @@ public class PortariaService {
             aberto.setSaida(Instant.now());
             aberto.setTipo(TipoAcesso.SAIDA);
             aberto.setStatus(StatusAcesso.SAIU);
-            return br.com.morah.dto.Acesso.de(aberto);
+            return br.com.morah.dto.portaria.Acesso.de(aberto);
         }
 
         Acesso acesso = new Acesso();
@@ -171,7 +171,7 @@ public class PortariaService {
         acesso.setEntrada(Instant.now());
         acesso.setTipo(TipoAcesso.ENTRADA);
         acesso.setStatus(StatusAcesso.NO_CONDOMINIO);
-        return br.com.morah.dto.Acesso.de(acessoRepository.save(acesso));
+        return br.com.morah.dto.portaria.Acesso.de(acessoRepository.save(acesso));
     }
 
     /** 404 se for de outro condomínio; 403 se morador/proprietário de outra unidade. */

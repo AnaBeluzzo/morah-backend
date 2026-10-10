@@ -1,11 +1,11 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.DecisaoSolicitacaoVinculoRequest;
-import br.com.morah.dto.InquilinoCreateRequest;
-import br.com.morah.dto.SolicitacaoVinculo;
-import br.com.morah.dto.SolicitacaoVinculoCreateRequest;
-import br.com.morah.dto.Unidade;
-import br.com.morah.dto.VinculoUnidade;
+import br.com.morah.dto.minhaunidade.DecisaoSolicitacaoVinculoRequest;
+import br.com.morah.dto.minhaunidade.InquilinoCreateRequest;
+import br.com.morah.dto.minhaunidade.SolicitacaoVinculo;
+import br.com.morah.dto.minhaunidade.SolicitacaoVinculoCreateRequest;
+import br.com.morah.dto.minhaunidade.Unidade;
+import br.com.morah.dto.minhaunidade.VinculoUnidade;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.UnidadeService;
 import jakarta.validation.Valid;

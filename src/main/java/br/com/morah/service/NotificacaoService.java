@@ -1,9 +1,9 @@
 package br.com.morah.service;
 
-import br.com.morah.dto.Notificacao;
+import br.com.morah.dto.notificacoes.Notificacao;
 import br.com.morah.exception.ApiException;
+import br.com.morah.repository.notificacoes.NotificacaoRepository;
 import br.com.morah.security.UsuarioLogado;
-import br.com.morah.repository.NotificacaoRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class NotificacaoService {
     @Transactional
     public Notificacao marcarNotificacaoLida(UsuarioLogado usuario, Long notificacaoId) {
         // notificação de outra pessoa é tratada como inexistente (404)
-        br.com.morah.model.Notificacao notificacao = notificacaoRepository.findByIdAndPessoaId(notificacaoId, usuario.pessoaId())
+        br.com.morah.model.notificacoes.Notificacao notificacao = notificacaoRepository.findByIdAndPessoaId(notificacaoId, usuario.pessoaId())
                 .orElseThrow(() -> ApiException.naoEncontrado("Notificação não encontrada"));
         if (notificacao.getLidaEm() == null) {
             notificacao.setLidaEm(Instant.now());

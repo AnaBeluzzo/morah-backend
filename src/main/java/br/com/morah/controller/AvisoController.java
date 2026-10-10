@@ -1,14 +1,14 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.Aviso;
-import br.com.morah.dto.AvisoCreateRequest;
-import br.com.morah.dto.AvisoPage;
-import br.com.morah.dto.AvisoUpdateRequest;
-import br.com.morah.dto.PrioridadeAviso;
-import br.com.morah.dto.PublicoAlvo;
-import br.com.morah.dto.TipoPublicoAlvo;
+import br.com.morah.dto.avisos.Aviso;
+import br.com.morah.dto.avisos.AvisoCreateRequest;
+import br.com.morah.dto.avisos.AvisoPage;
+import br.com.morah.dto.avisos.AvisoUpdateRequest;
+import br.com.morah.dto.avisos.PrioridadeAviso;
+import br.com.morah.dto.avisos.PublicoAlvo;
+import br.com.morah.dto.avisos.TipoPublicoAlvo;
 import br.com.morah.exception.ApiException;
-import br.com.morah.pattern.BaseCrudController;
+import br.com.morah.pattern.templatemethod.crud.BaseCrudController;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.AvisoService;
 import jakarta.validation.Valid;

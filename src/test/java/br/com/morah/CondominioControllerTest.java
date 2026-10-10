@@ -1,6 +1,6 @@
 package br.com.morah;
 
-import br.com.morah.pattern.CacheModulosAtivos;
+import br.com.morah.pattern.singleton.CacheModulosAtivos;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

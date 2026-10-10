@@ -1,30 +1,30 @@
 package br.com.morah.service;
 
-import br.com.morah.dto.CobrancaPage;
-import br.com.morah.dto.DocumentoFinanceiroCreateRequest;
-import br.com.morah.dto.DocumentoFinanceiroPage;
-import br.com.morah.dto.FalhaGeracaoCobranca;
-import br.com.morah.dto.GerarCobrancasResponse;
-import br.com.morah.dto.InadimplenciaResumo;
-import br.com.morah.dto.PageMetadata;
-import br.com.morah.dto.PixResponse;
-import br.com.morah.dto.StatusCobranca;
-import br.com.morah.dto.TaxaCreateRequest;
+import br.com.morah.dto.comum.PageMetadata;
+import br.com.morah.dto.financeiro.CobrancaPage;
+import br.com.morah.dto.financeiro.DocumentoFinanceiroCreateRequest;
+import br.com.morah.dto.financeiro.DocumentoFinanceiroPage;
+import br.com.morah.dto.financeiro.FalhaGeracaoCobranca;
+import br.com.morah.dto.financeiro.GerarCobrancasResponse;
+import br.com.morah.dto.financeiro.InadimplenciaResumo;
+import br.com.morah.dto.financeiro.PixResponse;
+import br.com.morah.dto.financeiro.StatusCobranca;
+import br.com.morah.dto.financeiro.TaxaCreateRequest;
 import br.com.morah.exception.ApiException;
-import br.com.morah.model.Cobranca;
-import br.com.morah.model.DocumentoFinanceiro;
-import br.com.morah.model.Taxa;
-import br.com.morah.model.Unidade;
-import br.com.morah.pattern.BaixaManualProcessador;
-import br.com.morah.pattern.EstrategiaRateio;
-import br.com.morah.pattern.NotificacaoFinanceiro;
-import br.com.morah.pattern.WebhookPagamentoProcessador;
-import br.com.morah.repository.CobrancaRepository;
-import br.com.morah.repository.CondominioRepository;
-import br.com.morah.repository.DocumentoFinanceiroRepository;
-import br.com.morah.repository.PessoaPerfilRepository;
-import br.com.morah.repository.TaxaRepository;
-import br.com.morah.repository.UnidadeRepository;
+import br.com.morah.model.condominio.Unidade;
+import br.com.morah.model.financeiro.Cobranca;
+import br.com.morah.model.financeiro.DocumentoFinanceiro;
+import br.com.morah.model.financeiro.Taxa;
+import br.com.morah.pattern.strategy.rateio.EstrategiaRateio;
+import br.com.morah.pattern.templatemethod.notificacao.NotificacaoFinanceiro;
+import br.com.morah.pattern.templatemethod.pagamento.BaixaManualProcessador;
+import br.com.morah.pattern.templatemethod.pagamento.WebhookPagamentoProcessador;
+import br.com.morah.repository.condominio.CondominioRepository;
+import br.com.morah.repository.condominio.UnidadeRepository;
+import br.com.morah.repository.financeiro.CobrancaRepository;
+import br.com.morah.repository.financeiro.DocumentoFinanceiroRepository;
+import br.com.morah.repository.financeiro.TaxaRepository;
+import br.com.morah.repository.login.PessoaPerfilRepository;
 import br.com.morah.security.UsuarioLogado;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -93,13 +93,13 @@ public class FinanceiroService {
 
         Page<Cobranca> pagina = cobrancaRepository.buscarComFiltros(usuario.condominioId(), unidadeFiltro, competencia,
                 statusGravado, vencidoAntesDe, venceAPartirDe, PageRequest.of(page, size));
-        return new CobrancaPage(pagina.getContent().stream().map(br.com.morah.dto.Cobranca::de).toList(),
+        return new CobrancaPage(pagina.getContent().stream().map(br.com.morah.dto.financeiro.Cobranca::de).toList(),
                 PageMetadata.de(pagina));
     }
 
     @Transactional(readOnly = true)
-    public br.com.morah.dto.Cobranca buscarCobranca(UsuarioLogado usuario, Long cobrancaId) {
-        return br.com.morah.dto.Cobranca.de(buscarCobrancaPermitida(usuario, cobrancaId));
+    public br.com.morah.dto.financeiro.Cobranca buscarCobranca(UsuarioLogado usuario, Long cobrancaId) {
+        return br.com.morah.dto.financeiro.Cobranca.de(buscarCobrancaPermitida(usuario, cobrancaId));
     }
 
     @Transactional(readOnly = true)
@@ -113,8 +113,8 @@ public class FinanceiroService {
     }
 
     @Transactional
-    public br.com.morah.dto.Cobranca baixarCobrancaManualmente(Long cobrancaId) {
-        return br.com.morah.dto.Cobranca.de(baixaManualProcessador.processar(cobrancaId));
+    public br.com.morah.dto.financeiro.Cobranca baixarCobrancaManualmente(Long cobrancaId) {
+        return br.com.morah.dto.financeiro.Cobranca.de(baixaManualProcessador.processar(cobrancaId));
     }
 
     @Transactional
@@ -134,12 +134,12 @@ public class FinanceiroService {
     public DocumentoFinanceiroPage buscarDocumentosFinanceiros(UsuarioLogado usuario, int page, int size) {
         Page<DocumentoFinanceiro> pagina = documentoFinanceiroRepository
                 .findByCondominioIdOrderByPublicadoEmDescIdDesc(usuario.condominioId(), PageRequest.of(page, size));
-        return new DocumentoFinanceiroPage(pagina.getContent().stream().map(br.com.morah.dto.DocumentoFinanceiro::de).toList(),
+        return new DocumentoFinanceiroPage(pagina.getContent().stream().map(br.com.morah.dto.financeiro.DocumentoFinanceiro::de).toList(),
                 PageMetadata.de(pagina));
     }
 
     @Transactional
-    public br.com.morah.dto.DocumentoFinanceiro criarDocumentoFinanceiro(UsuarioLogado usuario,
+    public br.com.morah.dto.financeiro.DocumentoFinanceiro criarDocumentoFinanceiro(UsuarioLogado usuario,
                                                                          DocumentoFinanceiroCreateRequest request) {
         DocumentoFinanceiro documento = new DocumentoFinanceiro();
         documento.setCondominio(condominioRepository.getReferenceById(usuario.condominioId()));
@@ -148,11 +148,11 @@ public class FinanceiroService {
         documento.setArquivoUrl(request.arquivoUrl());
         documento.setCompetencia(request.competencia());
         documento.setPublicadoEm(Instant.now());
-        return br.com.morah.dto.DocumentoFinanceiro.de(documentoFinanceiroRepository.save(documento));
+        return br.com.morah.dto.financeiro.DocumentoFinanceiro.de(documentoFinanceiroRepository.save(documento));
     }
 
     @Transactional
-    public br.com.morah.dto.Taxa criarTaxa(UsuarioLogado usuario, TaxaCreateRequest request) {
+    public br.com.morah.dto.financeiro.Taxa criarTaxa(UsuarioLogado usuario, TaxaCreateRequest request) {
         try {
             YearMonth.parse(request.competencia());
         } catch (DateTimeParseException e) {
@@ -165,7 +165,7 @@ public class FinanceiroService {
         taxa.setValor(request.valor());
         taxa.setTipoRateio(request.tipoRateio());
         taxa.setVencimentoDia(request.vencimentoDia());
-        return br.com.morah.dto.Taxa.de(taxaRepository.save(taxa));
+        return br.com.morah.dto.financeiro.Taxa.de(taxaRepository.save(taxa));
     }
 
     /** Uma cobrança pendente por unidade; o valor vem da estratégia de rateio da taxa (Strategy). */

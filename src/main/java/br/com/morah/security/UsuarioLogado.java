@@ -1,6 +1,6 @@
 package br.com.morah.security;
 
-import br.com.morah.dto.Perfil;
+import br.com.morah.dto.login.Perfil;
 import br.com.morah.exception.ApiException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

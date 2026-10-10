@@ -1,13 +1,13 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.AreaComum;
-import br.com.morah.dto.Disponibilidade;
-import br.com.morah.dto.Reserva;
-import br.com.morah.dto.ReservaCreateRequest;
-import br.com.morah.dto.ReservaPage;
-import br.com.morah.dto.VistoriaRequest;
+import br.com.morah.dto.reservas.AreaComum;
+import br.com.morah.dto.reservas.Disponibilidade;
+import br.com.morah.dto.reservas.Reserva;
+import br.com.morah.dto.reservas.ReservaCreateRequest;
+import br.com.morah.dto.reservas.ReservaPage;
+import br.com.morah.dto.reservas.VistoriaRequest;
 import br.com.morah.exception.ApiException;
-import br.com.morah.pattern.BaseCrudController;
+import br.com.morah.pattern.templatemethod.crud.BaseCrudController;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.ReservaService;
 import jakarta.validation.Valid;

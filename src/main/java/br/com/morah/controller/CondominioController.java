@@ -1,10 +1,10 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.ModuloCodigo;
-import br.com.morah.dto.ModuloCondominio;
-import br.com.morah.dto.ModuloUpdateRequest;
-import br.com.morah.dto.Personalizacao;
-import br.com.morah.dto.PersonalizacaoUpdateRequest;
+import br.com.morah.dto.personalizacao.ModuloCodigo;
+import br.com.morah.dto.personalizacao.ModuloCondominio;
+import br.com.morah.dto.personalizacao.ModuloUpdateRequest;
+import br.com.morah.dto.personalizacao.Personalizacao;
+import br.com.morah.dto.personalizacao.PersonalizacaoUpdateRequest;
 import br.com.morah.exception.ApiException;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.CondominioService;

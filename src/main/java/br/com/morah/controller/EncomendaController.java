@@ -1,15 +1,15 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.AutorizacaoRetirada;
-import br.com.morah.dto.AutorizacaoRetiradaCreateRequest;
-import br.com.morah.dto.Encomenda;
-import br.com.morah.dto.EncomendaCreateRequest;
-import br.com.morah.dto.EncomendaPage;
-import br.com.morah.dto.Ocorrencia;
-import br.com.morah.dto.OcorrenciaCreateRequest;
-import br.com.morah.dto.RetiradaConfirmRequest;
-import br.com.morah.dto.StatusEncomenda;
-import br.com.morah.pattern.BaseCrudController;
+import br.com.morah.dto.encomendas.AutorizacaoRetirada;
+import br.com.morah.dto.encomendas.AutorizacaoRetiradaCreateRequest;
+import br.com.morah.dto.encomendas.Encomenda;
+import br.com.morah.dto.encomendas.EncomendaCreateRequest;
+import br.com.morah.dto.encomendas.EncomendaPage;
+import br.com.morah.dto.encomendas.Ocorrencia;
+import br.com.morah.dto.encomendas.OcorrenciaCreateRequest;
+import br.com.morah.dto.encomendas.RetiradaConfirmRequest;
+import br.com.morah.dto.encomendas.StatusEncomenda;
+import br.com.morah.pattern.templatemethod.crud.BaseCrudController;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.EncomendaService;
 import jakarta.validation.Valid;

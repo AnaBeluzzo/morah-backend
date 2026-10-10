@@ -1,6 +1,6 @@
 package br.com.morah.config;
 
-import br.com.morah.dto.ModuloCodigo;
+import br.com.morah.dto.personalizacao.ModuloCodigo;
 import br.com.morah.exception.ApiException;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.CondominioService;

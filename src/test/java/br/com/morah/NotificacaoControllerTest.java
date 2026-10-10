@@ -1,9 +1,9 @@
 package br.com.morah;
 
-import br.com.morah.dto.TipoNotificacao;
-import br.com.morah.model.Notificacao;
-import br.com.morah.repository.NotificacaoRepository;
-import br.com.morah.repository.PessoaRepository;
+import br.com.morah.dto.notificacoes.TipoNotificacao;
+import br.com.morah.model.notificacoes.Notificacao;
+import br.com.morah.repository.login.PessoaRepository;
+import br.com.morah.repository.notificacoes.NotificacaoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

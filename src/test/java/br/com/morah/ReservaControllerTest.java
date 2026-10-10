@@ -1,6 +1,6 @@
 package br.com.morah;
 
-import br.com.morah.repository.OcorrenciaRepository;
+import br.com.morah.repository.encomendas.OcorrenciaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

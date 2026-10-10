@@ -1,6 +1,6 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.Notificacao;
+import br.com.morah.dto.notificacoes.Notificacao;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.NotificacaoService;
 import jakarta.validation.constraints.Max;

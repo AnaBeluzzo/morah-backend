@@ -1,7 +1,7 @@
 package br.com.morah.config;
 
 import br.com.morah.exception.GlobalExceptionHandler;
-import br.com.morah.repository.SessaoRepository;
+import br.com.morah.repository.login.SessaoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,12 +31,12 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Spring Security como "resource server" de JWT próprio (HS256, sem Authorization Server).

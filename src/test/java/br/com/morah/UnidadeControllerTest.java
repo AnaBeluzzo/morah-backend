@@ -1,6 +1,6 @@
 package br.com.morah;
 
-import br.com.morah.repository.PessoaPerfilRepository;
+import br.com.morah.repository.login.PessoaPerfilRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

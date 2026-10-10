@@ -1,13 +1,13 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.Acesso;
-import br.com.morah.dto.AcessoCreateRequest;
-import br.com.morah.dto.AcessoPage;
-import br.com.morah.dto.AutorizacaoVisita;
-import br.com.morah.dto.AutorizacaoVisitaCreateRequest;
-import br.com.morah.dto.AutorizacaoVisitaPage;
-import br.com.morah.dto.DecisaoAutorizacaoRequest;
-import br.com.morah.dto.StatusAutorizacaoVisita;
+import br.com.morah.dto.portaria.Acesso;
+import br.com.morah.dto.portaria.AcessoCreateRequest;
+import br.com.morah.dto.portaria.AcessoPage;
+import br.com.morah.dto.portaria.AutorizacaoVisita;
+import br.com.morah.dto.portaria.AutorizacaoVisitaCreateRequest;
+import br.com.morah.dto.portaria.AutorizacaoVisitaPage;
+import br.com.morah.dto.portaria.DecisaoAutorizacaoRequest;
+import br.com.morah.dto.portaria.StatusAutorizacaoVisita;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.PortariaService;
 import jakarta.validation.Valid;

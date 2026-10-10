@@ -1,7 +1,7 @@
 package br.com.morah;
 
-import br.com.morah.model.AutorizacaoVisita;
-import br.com.morah.repository.AutorizacaoVisitaRepository;
+import br.com.morah.model.portaria.AutorizacaoVisita;
+import br.com.morah.repository.portaria.AutorizacaoVisitaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

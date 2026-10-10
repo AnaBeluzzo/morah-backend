@@ -102,14 +102,48 @@ Pacotes em `br.com.morah`:
 | Pacote | Conteúdo |
 |---|---|
 | `controller` | Controllers REST (um por área do contrato) |
-| `service` | Regras de negócio |
-| `repository` | Interfaces Spring Data JPA |
-| `model` | Entidades JPA |
-| `dto` | Um `record` por schema de objeto do contrato e um `enum` por schema de enum |
+| `service` | Regras de negócio (um service por área) |
+| `repository.<modulo>` | Interfaces Spring Data JPA, agrupadas por módulo |
+| `model.<modulo>` | Entidades JPA, agrupadas por módulo |
+| `dto.<modulo>` | Um `record` por schema de objeto do contrato e um `enum` por schema de enum, agrupados pela seção do contrato |
 | `exception` | `ApiException` e o `GlobalExceptionHandler` (ProblemDetail, RFC 9457) |
 | `config` | `SecurityConfig`, `WebConfig`, `ModuloAtivoInterceptor`, `OpenApiConfig` |
 | `security` | `TokenService` (gera o JWT) e `UsuarioLogado` (claims do token) |
-| `pattern` | Os design patterns (ver abaixo) |
+| `pattern.<tipo>.<uso>` | Os design patterns: uma pasta por tipo e uma subpasta por uso (ver abaixo) |
+
+Módulos usados em `dto`, `model` e `repository`: `comum` (só DTOs), `login`, `condominio` (condomínio,
+bloco e unidade; só model/repository), `minhaunidade`, `financeiro`, `portaria`, `avisos`, `reservas`,
+`encomendas` (inclui a `Ocorrencia`, como no contrato), `notificacoes`, `personalizacao` e `dashboard`
+(só DTOs).
+
+```
+src/main/java/br/com/morah
+├── config/          SecurityConfig, WebConfig, ModuloAtivoInterceptor, OpenApiConfig
+├── controller/      AuthController, AvisoController, FinanceiroController, ...
+├── dto/
+│   ├── avisos/  comum/  dashboard/  encomendas/  financeiro/  login/
+│   └── minhaunidade/  notificacoes/  personalizacao/  portaria/  reservas/
+├── exception/       ApiException, GlobalExceptionHandler
+├── model/
+│   ├── avisos/  condominio/  encomendas/  financeiro/  login/
+│   └── minhaunidade/  notificacoes/  personalizacao/  portaria/  reservas/
+├── pattern/
+│   ├── singleton/                  GeradorCodigo, CacheModulosAtivos
+│   ├── strategy/
+│   │   ├── canal/                  CanalNotificacao, CanalPush, CanalEmail
+│   │   ├── dashboard/              MontadorDashboard e os 3 montadores
+│   │   └── rateio/                 EstrategiaRateio, RateioIgualitario, RateioFracaoIdeal
+│   └── templatemethod/
+│       ├── crud/                   BaseCrudController
+│       ├── notificacao/            NotificacaoTemplate e as 6 notificações dos módulos
+│       └── pagamento/              ProcessamentoPagamentoTemplate, BaixaManualProcessador, WebhookPagamentoProcessador
+├── repository/      (mesmos módulos do model)
+├── security/        TokenService, UsuarioLogado
+└── service/         AuthService, AvisoService, FinanceiroService, ...
+```
+
+Os testes unitários dos patterns ficam no mesmo pacote da classe testada (ex.:
+`src/test/java/br/com/morah/pattern/singleton/GeradorCodigoTest.java`).
 
 ## Endpoints → classe e método
 
@@ -190,18 +224,18 @@ Cada controller chama o service de mesmo nome de área (`AvisoController` → `A
 
 ## Design patterns
 
-São 8 usos: 3 Template Method, 3 Strategy e 2 Singleton. Todos estão em `br.com.morah.pattern`.
+São 8 usos: 3 Template Method, 3 Strategy e 2 Singleton. Cada uso tem uma pasta própria em `br.com.morah.pattern`.
 
-| Pattern | Onde | Problema que resolve |
-|---|---|---|
-| Template Method | `BaseCrudController<T>` (usado por `AvisoController`, `ReservaController`, `EncomendaController`) | Fluxo fixo por requisição: usuário logado → validar payload → executar → verificar escopo → responder. Os controllers só implementam os ganchos `validar()` e `verificarEscopo()`. O fluxo roda numa transação: se o escopo for negado, o que foi executado é desfeito. |
-| Template Method | `NotificacaoTemplate<E>` (subclasses `NotificacaoAviso`, `NotificacaoVisitante`, `NotificacaoEncomenda`, `NotificacaoReserva`, `NotificacaoFinanceiro`, `NotificacaoConvite`) | Toda notificação segue montar payload → escolher canal → enviar → registrar no banco. Cada módulo só escreve o texto. |
-| Template Method | `ProcessamentoPagamentoTemplate<E>` (`BaixaManualProcessador`, `WebhookPagamentoProcessador`) | Quitar uma cobrança: validar origem → localizar → verificar → marcar como pago → notificar. Só a validação da origem muda (síndico do condomínio × assinatura HMAC); o webhook `falhou` para antes de marcar como pago. |
-| Strategy | `EstrategiaRateio` (`RateioIgualitario`, `RateioFracaoIdeal`) | Valor de cada unidade na geração em lote, escolhido pelo `tipoRateio` da taxa. |
-| Strategy | `CanalNotificacao` (`CanalPush`, `CanalEmail`) | Forma de envio escolhida no passo "escolher canal" do `NotificacaoTemplate` (financeiro e convite por e-mail; o resto por push). Envio simulado com log. |
-| Strategy | `MontadorDashboard` (`DashboardMoradorMontador`, `DashboardSindicoMontador`, `DashboardPortariaMontador`) | Tela inicial diferente por perfil, escolhida pelo perfil ativo no `DashboardController`. |
-| Singleton (GoF, idiom holder) | `GeradorCodigo` | Uma única instância de `SecureRandom` (cara de criar) para os códigos de 6 dígitos das encomendas e das autorizações de terceiros. |
-| Singleton (enum) | `CacheModulosAtivos.INSTANCE` | Mapa em memória dos módulos ativos por condomínio, para o interceptor não ir ao banco a cada requisição. Invalidado em `alterarModulo`. |
+| Pattern | Pacote | Classes | Problema que resolve |
+|---|---|---|---|
+| Template Method | `pattern.templatemethod.crud` | `BaseCrudController<T>` (usado por `AvisoController`, `ReservaController`, `EncomendaController`) | Fluxo fixo por requisição: usuário logado → validar payload → executar → verificar escopo → responder. Os controllers só implementam os ganchos `validar()` e `verificarEscopo()`. O fluxo roda numa transação: se o escopo for negado, o que foi executado é desfeito. |
+| Template Method | `pattern.templatemethod.notificacao` | `NotificacaoTemplate<E>` (subclasses `NotificacaoAviso`, `NotificacaoVisitante`, `NotificacaoEncomenda`, `NotificacaoReserva`, `NotificacaoFinanceiro`, `NotificacaoConvite`) | Toda notificação segue montar payload → escolher canal → enviar → registrar no banco. Cada módulo só escreve o texto. |
+| Template Method | `pattern.templatemethod.pagamento` | `ProcessamentoPagamentoTemplate<E>` (`BaixaManualProcessador`, `WebhookPagamentoProcessador`) | Quitar uma cobrança: validar origem → localizar → verificar → marcar como pago → notificar. Só a validação da origem muda (síndico do condomínio × assinatura HMAC); o webhook `falhou` para antes de marcar como pago. |
+| Strategy | `pattern.strategy.rateio` | `EstrategiaRateio` (`RateioIgualitario`, `RateioFracaoIdeal`) | Valor de cada unidade na geração em lote, escolhido pelo `tipoRateio` da taxa. |
+| Strategy | `pattern.strategy.canal` | `CanalNotificacao` (`CanalPush`, `CanalEmail`) | Forma de envio escolhida no passo "escolher canal" do `NotificacaoTemplate` (financeiro e convite por e-mail; o resto por push). Envio simulado com log. |
+| Strategy | `pattern.strategy.dashboard` | `MontadorDashboard` (`DashboardMoradorMontador`, `DashboardSindicoMontador`, `DashboardPortariaMontador`) | Tela inicial diferente por perfil, escolhida pelo perfil ativo no `DashboardController`. |
+| Singleton (GoF, idiom holder) | `pattern.singleton` | `GeradorCodigo` | Uma única instância de `SecureRandom` (cara de criar) para os códigos de 6 dígitos das encomendas e das autorizações de terceiros. |
+| Singleton (enum) | `pattern.singleton` | `CacheModulosAtivos.INSTANCE` | Mapa em memória dos módulos ativos por condomínio, para o interceptor não ir ao banco a cada requisição. Invalidado em `alterarModulo`. |
 
 O `TokenService` é um `@Service` comum do Spring e não é tratado como pattern.
 

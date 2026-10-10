@@ -1,6 +1,6 @@
 package br.com.morah.security;
 
-import br.com.morah.model.Sessao;
+import br.com.morah.model.login.Sessao;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;

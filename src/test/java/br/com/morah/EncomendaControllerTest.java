@@ -1,7 +1,7 @@
 package br.com.morah;
 
-import br.com.morah.dto.StatusAutorizacaoRetirada;
-import br.com.morah.repository.AutorizacaoRetiradaRepository;
+import br.com.morah.dto.encomendas.StatusAutorizacaoRetirada;
+import br.com.morah.repository.encomendas.AutorizacaoRetiradaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

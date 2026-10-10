@@ -1,26 +1,26 @@
 package br.com.morah.service;
 
-import br.com.morah.dto.DecisaoSolicitacaoVinculo;
-import br.com.morah.dto.DecisaoSolicitacaoVinculoRequest;
-import br.com.morah.dto.InquilinoCreateRequest;
-import br.com.morah.dto.Perfil;
-import br.com.morah.dto.SolicitacaoVinculoCreateRequest;
-import br.com.morah.dto.StatusSolicitacaoVinculo;
-import br.com.morah.dto.TipoVinculo;
+import br.com.morah.dto.login.Perfil;
+import br.com.morah.dto.minhaunidade.DecisaoSolicitacaoVinculo;
+import br.com.morah.dto.minhaunidade.DecisaoSolicitacaoVinculoRequest;
+import br.com.morah.dto.minhaunidade.InquilinoCreateRequest;
+import br.com.morah.dto.minhaunidade.SolicitacaoVinculoCreateRequest;
+import br.com.morah.dto.minhaunidade.StatusSolicitacaoVinculo;
+import br.com.morah.dto.minhaunidade.TipoVinculo;
 import br.com.morah.exception.ApiException;
-import br.com.morah.model.Pessoa;
-import br.com.morah.model.PessoaPerfil;
-import br.com.morah.model.SolicitacaoVinculo;
-import br.com.morah.model.Unidade;
-import br.com.morah.model.VinculoUnidade;
-import br.com.morah.pattern.NotificacaoConvite;
-import br.com.morah.repository.CondominioRepository;
-import br.com.morah.repository.PessoaPerfilRepository;
-import br.com.morah.repository.PessoaRepository;
-import br.com.morah.repository.SessaoRepository;
-import br.com.morah.repository.SolicitacaoVinculoRepository;
-import br.com.morah.repository.UnidadeRepository;
-import br.com.morah.repository.VinculoUnidadeRepository;
+import br.com.morah.model.condominio.Unidade;
+import br.com.morah.model.login.Pessoa;
+import br.com.morah.model.login.PessoaPerfil;
+import br.com.morah.model.minhaunidade.SolicitacaoVinculo;
+import br.com.morah.model.minhaunidade.VinculoUnidade;
+import br.com.morah.pattern.templatemethod.notificacao.NotificacaoConvite;
+import br.com.morah.repository.condominio.CondominioRepository;
+import br.com.morah.repository.condominio.UnidadeRepository;
+import br.com.morah.repository.login.PessoaPerfilRepository;
+import br.com.morah.repository.login.PessoaRepository;
+import br.com.morah.repository.login.SessaoRepository;
+import br.com.morah.repository.minhaunidade.SolicitacaoVinculoRepository;
+import br.com.morah.repository.minhaunidade.VinculoUnidadeRepository;
 import br.com.morah.security.UsuarioLogado;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,19 +56,19 @@ public class UnidadeService {
     }
 
     @Transactional(readOnly = true)
-    public br.com.morah.dto.Unidade buscarMinhaUnidade(UsuarioLogado usuario) {
-        return br.com.morah.dto.Unidade.de(buscarDoCondominio(usuario, usuario.unidadeId()));
+    public br.com.morah.dto.minhaunidade.Unidade buscarMinhaUnidade(UsuarioLogado usuario) {
+        return br.com.morah.dto.minhaunidade.Unidade.de(buscarDoCondominio(usuario, usuario.unidadeId()));
     }
 
     @Transactional(readOnly = true)
-    public List<br.com.morah.dto.VinculoUnidade> buscarVinculos(UsuarioLogado usuario) {
+    public List<br.com.morah.dto.minhaunidade.VinculoUnidade> buscarVinculos(UsuarioLogado usuario) {
         return vinculoUnidadeRepository.findByUnidadeIdOrderById(usuario.unidadeId()).stream()
-                .map(br.com.morah.dto.VinculoUnidade::de)
+                .map(br.com.morah.dto.minhaunidade.VinculoUnidade::de)
                 .toList();
     }
 
     @Transactional
-    public br.com.morah.dto.SolicitacaoVinculo solicitarVinculo(UsuarioLogado usuario, SolicitacaoVinculoCreateRequest request) {
+    public br.com.morah.dto.minhaunidade.SolicitacaoVinculo solicitarVinculo(UsuarioLogado usuario, SolicitacaoVinculoCreateRequest request) {
         SolicitacaoVinculo solicitacao = new SolicitacaoVinculo();
         solicitacao.setUnidade(buscarDoCondominio(usuario, usuario.unidadeId()));
         solicitacao.setTipoVinculo(request.tipoVinculo());
@@ -76,12 +76,12 @@ public class UnidadeService {
         solicitacao.setCpf(request.cpf());
         solicitacao.setStatus(StatusSolicitacaoVinculo.PENDENTE);
         solicitacao.setSolicitadoEm(Instant.now());
-        return br.com.morah.dto.SolicitacaoVinculo.de(solicitacaoVinculoRepository.save(solicitacao));
+        return br.com.morah.dto.minhaunidade.SolicitacaoVinculo.de(solicitacaoVinculoRepository.save(solicitacao));
     }
 
     /** Cria a pessoa, o vínculo "inquilino" e o perfil "morador"; o convite vai por e-mail. */
     @Transactional
-    public br.com.morah.dto.VinculoUnidade criarInquilino(UsuarioLogado usuario, InquilinoCreateRequest request) {
+    public br.com.morah.dto.minhaunidade.VinculoUnidade criarInquilino(UsuarioLogado usuario, InquilinoCreateRequest request) {
         if (request.contratoFim() != null && request.contratoFim().isBefore(request.contratoInicio())) {
             throw ApiException.requisicaoInvalida("contratoFim não pode ser anterior a contratoInicio");
         }
@@ -114,7 +114,7 @@ public class UnidadeService {
         pessoaPerfilRepository.save(perfil);
 
         notificacaoConvite.notificar(vinculo, List.of(inquilino));
-        return br.com.morah.dto.VinculoUnidade.de(vinculo);
+        return br.com.morah.dto.minhaunidade.VinculoUnidade.de(vinculo);
     }
 
     /** Fim do contrato = hoje; remove o perfil do inquilino e encerra as sessões dele. */
@@ -132,20 +132,20 @@ public class UnidadeService {
     }
 
     @Transactional(readOnly = true)
-    public br.com.morah.dto.Unidade buscarUnidade(UsuarioLogado usuario, Long unidadeId) {
-        return br.com.morah.dto.Unidade.de(buscarDoCondominio(usuario, unidadeId));
+    public br.com.morah.dto.minhaunidade.Unidade buscarUnidade(UsuarioLogado usuario, Long unidadeId) {
+        return br.com.morah.dto.minhaunidade.Unidade.de(buscarDoCondominio(usuario, unidadeId));
     }
 
     @Transactional(readOnly = true)
-    public List<br.com.morah.dto.SolicitacaoVinculo> buscarSolicitacoesVinculo(UsuarioLogado usuario, Long unidadeId) {
+    public List<br.com.morah.dto.minhaunidade.SolicitacaoVinculo> buscarSolicitacoesVinculo(UsuarioLogado usuario, Long unidadeId) {
         buscarDoCondominio(usuario, unidadeId);
         return solicitacaoVinculoRepository.findByUnidadeIdAndStatusOrderById(unidadeId, StatusSolicitacaoVinculo.PENDENTE)
-                .stream().map(br.com.morah.dto.SolicitacaoVinculo::de).toList();
+                .stream().map(br.com.morah.dto.minhaunidade.SolicitacaoVinculo::de).toList();
     }
 
     /** Aprovar cria a pessoa e o vínculo com início hoje; solicitação já decidida → 409. */
     @Transactional
-    public br.com.morah.dto.SolicitacaoVinculo decidirSolicitacaoVinculo(UsuarioLogado usuario, Long unidadeId,
+    public br.com.morah.dto.minhaunidade.SolicitacaoVinculo decidirSolicitacaoVinculo(UsuarioLogado usuario, Long unidadeId,
                                                                           Long solicitacaoId,
                                                                           DecisaoSolicitacaoVinculoRequest request) {
         Unidade unidade = buscarDoCondominio(usuario, unidadeId);
@@ -172,7 +172,7 @@ public class UnidadeService {
         } else {
             solicitacao.setStatus(StatusSolicitacaoVinculo.REJEITADA);
         }
-        return br.com.morah.dto.SolicitacaoVinculo.de(solicitacao);
+        return br.com.morah.dto.minhaunidade.SolicitacaoVinculo.de(solicitacao);
     }
 
     /** Unidade de outro condomínio (ou inexistente) → 404. */

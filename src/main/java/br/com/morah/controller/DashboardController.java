@@ -1,7 +1,7 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.Dashboard;
-import br.com.morah.pattern.MontadorDashboard;
+import br.com.morah.dto.dashboard.Dashboard;
+import br.com.morah.pattern.strategy.dashboard.MontadorDashboard;
 import br.com.morah.security.UsuarioLogado;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

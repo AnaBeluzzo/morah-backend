@@ -1,26 +1,26 @@
 package br.com.morah.service;
 
-import br.com.morah.dto.AvisoCreateRequest;
-import br.com.morah.dto.AvisoPage;
-import br.com.morah.dto.AvisoUpdateRequest;
-import br.com.morah.dto.PageMetadata;
-import br.com.morah.dto.PrioridadeAviso;
-import br.com.morah.dto.TipoPublicoAlvo;
+import br.com.morah.dto.avisos.AvisoCreateRequest;
+import br.com.morah.dto.avisos.AvisoPage;
+import br.com.morah.dto.avisos.AvisoUpdateRequest;
+import br.com.morah.dto.avisos.PrioridadeAviso;
+import br.com.morah.dto.avisos.TipoPublicoAlvo;
+import br.com.morah.dto.comum.PageMetadata;
 import br.com.morah.exception.ApiException;
-import br.com.morah.model.Aviso;
-import br.com.morah.model.LeituraAviso;
-import br.com.morah.model.Pessoa;
-import br.com.morah.model.PessoaPerfil;
-import br.com.morah.model.PublicoAlvo;
-import br.com.morah.pattern.NotificacaoAviso;
-import br.com.morah.repository.AvisoRepository;
-import br.com.morah.repository.BlocoRepository;
-import br.com.morah.repository.LeituraAvisoRepository;
-import br.com.morah.repository.PessoaPerfilRepository;
-import br.com.morah.repository.PessoaRepository;
-import br.com.morah.repository.UnidadeRepository;
+import br.com.morah.model.avisos.Aviso;
+import br.com.morah.model.avisos.LeituraAviso;
+import br.com.morah.model.avisos.PublicoAlvo;
+import br.com.morah.model.login.Pessoa;
+import br.com.morah.model.login.PessoaPerfil;
+import br.com.morah.pattern.templatemethod.notificacao.NotificacaoAviso;
+import br.com.morah.repository.avisos.AvisoRepository;
+import br.com.morah.repository.avisos.LeituraAvisoRepository;
+import br.com.morah.repository.condominio.BlocoRepository;
+import br.com.morah.repository.condominio.CondominioRepository;
+import br.com.morah.repository.condominio.UnidadeRepository;
+import br.com.morah.repository.login.PessoaPerfilRepository;
+import br.com.morah.repository.login.PessoaRepository;
 import br.com.morah.security.UsuarioLogado;
-import br.com.morah.repository.CondominioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -61,14 +61,14 @@ public class AvisoService {
         Long blocoId = todos ? null : blocoDaUnidade(usuario.unidadeId());
         Page<Aviso> pagina = avisoRepository.buscarVigentes(usuario.condominioId(), Instant.now(), categoria, prioridade,
                 todos, blocoId, usuario.unidadeId(), PageRequest.of(page, size));
-        List<br.com.morah.dto.Aviso> avisos = pagina.getContent().stream()
+        List<br.com.morah.dto.avisos.Aviso> avisos = pagina.getContent().stream()
                 .map(aviso -> paraDto(aviso, usuario))
                 .toList();
         return new AvisoPage(avisos, PageMetadata.de(pagina));
     }
 
     @Transactional
-    public br.com.morah.dto.Aviso criarAviso(UsuarioLogado usuario, AvisoCreateRequest request) {
+    public br.com.morah.dto.avisos.Aviso criarAviso(UsuarioLogado usuario, AvisoCreateRequest request) {
         validarPublicoAlvo(usuario, request.publicoAlvo());
 
         PublicoAlvo publico = new PublicoAlvo();
@@ -95,7 +95,7 @@ public class AvisoService {
 
     /** GET de um aviso: 404 de outro condomínio, 410 se expirado; marca como lido. */
     @Transactional
-    public br.com.morah.dto.Aviso buscarAviso(UsuarioLogado usuario, Long avisoId) {
+    public br.com.morah.dto.avisos.Aviso buscarAviso(UsuarioLogado usuario, Long avisoId) {
         Aviso aviso = buscarDoCondominio(usuario, avisoId);
         if (!aviso.isVigente()) {
             throw ApiException.expirado("Aviso fora de vigência");
@@ -107,11 +107,11 @@ public class AvisoService {
             leitura.setLidoEm(Instant.now());
             leituraAvisoRepository.save(leitura);
         }
-        return br.com.morah.dto.Aviso.de(aviso, true);
+        return br.com.morah.dto.avisos.Aviso.de(aviso, true);
     }
 
     @Transactional
-    public br.com.morah.dto.Aviso alterarAviso(UsuarioLogado usuario, Long avisoId, AvisoUpdateRequest request) {
+    public br.com.morah.dto.avisos.Aviso alterarAviso(UsuarioLogado usuario, Long avisoId, AvisoUpdateRequest request) {
         Aviso aviso = buscarDoCondominio(usuario, avisoId);
         // PATCH: só altera o que foi enviado
         if (request.titulo() != null) {
@@ -134,7 +134,7 @@ public class AvisoService {
 
     /** O aviso não é apagado: expira agora. */
     @Transactional
-    public br.com.morah.dto.Aviso deletarAviso(UsuarioLogado usuario, Long avisoId) {
+    public br.com.morah.dto.avisos.Aviso deletarAviso(UsuarioLogado usuario, Long avisoId) {
         Aviso aviso = buscarDoCondominio(usuario, avisoId);
         aviso.setExpiraEm(Instant.now());
         return paraDto(aviso, usuario);
@@ -142,7 +142,7 @@ public class AvisoService {
 
     /** Regra de visibilidade do público-alvo (síndico e portaria veem todos). */
     @Transactional(readOnly = true)
-    public boolean isVisivel(br.com.morah.dto.PublicoAlvo publico, UsuarioLogado usuario) {
+    public boolean isVisivel(br.com.morah.dto.avisos.PublicoAlvo publico, UsuarioLogado usuario) {
         if (!usuario.isMoradorOuProprietario()) {
             return true;
         }
@@ -158,9 +158,9 @@ public class AvisoService {
                 .orElseThrow(() -> ApiException.naoEncontrado("Aviso não encontrado"));
     }
 
-    private br.com.morah.dto.Aviso paraDto(Aviso aviso, UsuarioLogado usuario) {
+    private br.com.morah.dto.avisos.Aviso paraDto(Aviso aviso, UsuarioLogado usuario) {
         boolean lido = leituraAvisoRepository.existsByAvisoIdAndPessoaId(aviso.getId(), usuario.pessoaId());
-        return br.com.morah.dto.Aviso.de(aviso, lido);
+        return br.com.morah.dto.avisos.Aviso.de(aviso, lido);
     }
 
     private Long blocoDaUnidade(Long unidadeId) {
@@ -168,7 +168,7 @@ public class AvisoService {
     }
 
     /** O bloco/unidade do público-alvo precisa existir no condomínio ativo. */
-    private void validarPublicoAlvo(UsuarioLogado usuario, br.com.morah.dto.PublicoAlvo publico) {
+    private void validarPublicoAlvo(UsuarioLogado usuario, br.com.morah.dto.avisos.PublicoAlvo publico) {
         if (publico.tipo() == TipoPublicoAlvo.BLOCO
                 && !blocoRepository.existsByIdAndCondominioId(publico.blocoId(), usuario.condominioId())) {
             throw ApiException.requisicaoInvalida("Bloco do público-alvo não existe neste condomínio");

@@ -1,14 +1,14 @@
 package br.com.morah.service;
 
-import br.com.morah.dto.ModuloCodigo;
-import br.com.morah.dto.PersonalizacaoUpdateRequest;
+import br.com.morah.dto.personalizacao.ModuloCodigo;
+import br.com.morah.dto.personalizacao.PersonalizacaoUpdateRequest;
 import br.com.morah.exception.ApiException;
-import br.com.morah.model.ModuloCondominio;
-import br.com.morah.model.Personalizacao;
-import br.com.morah.pattern.CacheModulosAtivos;
-import br.com.morah.repository.CondominioRepository;
-import br.com.morah.repository.ModuloCondominioRepository;
-import br.com.morah.repository.PersonalizacaoRepository;
+import br.com.morah.model.personalizacao.ModuloCondominio;
+import br.com.morah.model.personalizacao.Personalizacao;
+import br.com.morah.pattern.singleton.CacheModulosAtivos;
+import br.com.morah.repository.condominio.CondominioRepository;
+import br.com.morah.repository.personalizacao.ModuloCondominioRepository;
+import br.com.morah.repository.personalizacao.PersonalizacaoRepository;
 import br.com.morah.security.UsuarioLogado;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,13 +34,13 @@ public class CondominioService {
     }
 
     @Transactional(readOnly = true)
-    public br.com.morah.dto.Personalizacao buscarPersonalizacao(UsuarioLogado usuario) {
-        return br.com.morah.dto.Personalizacao.de(buscarDoCondominio(usuario));
+    public br.com.morah.dto.personalizacao.Personalizacao buscarPersonalizacao(UsuarioLogado usuario) {
+        return br.com.morah.dto.personalizacao.Personalizacao.de(buscarDoCondominio(usuario));
     }
 
     /** PATCH: só altera o que foi enviado; logoEnviada + valor null remove a logo. */
     @Transactional
-    public br.com.morah.dto.Personalizacao alterarPersonalizacao(UsuarioLogado usuario, PersonalizacaoUpdateRequest request,
+    public br.com.morah.dto.personalizacao.Personalizacao alterarPersonalizacao(UsuarioLogado usuario, PersonalizacaoUpdateRequest request,
                                                                 boolean logoEnviada) {
         Personalizacao personalizacao = buscarDoCondominio(usuario);
         if (request.nomeExibicao() != null) {
@@ -59,18 +59,18 @@ public class CondominioService {
             personalizacao.setCorDestaque(request.corDestaque());
         }
         personalizacao.setAtualizadoEm(Instant.now());
-        return br.com.morah.dto.Personalizacao.de(personalizacao);
+        return br.com.morah.dto.personalizacao.Personalizacao.de(personalizacao);
     }
 
     @Transactional(readOnly = true)
-    public List<br.com.morah.dto.ModuloCondominio> buscarModulos(UsuarioLogado usuario) {
+    public List<br.com.morah.dto.personalizacao.ModuloCondominio> buscarModulos(UsuarioLogado usuario) {
         return moduloCondominioRepository.findByCondominioIdOrderById(usuario.condominioId()).stream()
-                .map(br.com.morah.dto.ModuloCondominio::de)
+                .map(br.com.morah.dto.personalizacao.ModuloCondominio::de)
                 .toList();
     }
 
     @Transactional
-    public br.com.morah.dto.ModuloCondominio alterarModulo(UsuarioLogado usuario, ModuloCodigo codigo, boolean ativo) {
+    public br.com.morah.dto.personalizacao.ModuloCondominio alterarModulo(UsuarioLogado usuario, ModuloCodigo codigo, boolean ativo) {
         ModuloCondominio modulo = moduloCondominioRepository.findByCondominioIdAndModulo(usuario.condominioId(), codigo)
                 .orElseGet(() -> {
                     ModuloCondominio novo = new ModuloCondominio();
@@ -84,7 +84,7 @@ public class CondominioService {
 
         // o cache em memória deixa de valer para este condomínio
         CacheModulosAtivos.INSTANCE.invalidar(usuario.condominioId());
-        return br.com.morah.dto.ModuloCondominio.de(modulo);
+        return br.com.morah.dto.personalizacao.ModuloCondominio.de(modulo);
     }
 
     /** Consulta o Singleton de cache; só vai ao banco quando o condomínio ainda não está em memória. */

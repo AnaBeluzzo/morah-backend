@@ -1,26 +1,26 @@
 package br.com.morah.service;
 
-import br.com.morah.dto.AutorizacaoRetiradaCreateRequest;
-import br.com.morah.dto.EncomendaCreateRequest;
-import br.com.morah.dto.EncomendaPage;
-import br.com.morah.dto.OcorrenciaCreateRequest;
-import br.com.morah.dto.PageMetadata;
-import br.com.morah.dto.RetiradaConfirmRequest;
-import br.com.morah.dto.StatusAutorizacaoRetirada;
-import br.com.morah.dto.StatusEncomenda;
-import br.com.morah.dto.StatusOcorrencia;
+import br.com.morah.dto.comum.PageMetadata;
+import br.com.morah.dto.encomendas.AutorizacaoRetiradaCreateRequest;
+import br.com.morah.dto.encomendas.EncomendaCreateRequest;
+import br.com.morah.dto.encomendas.EncomendaPage;
+import br.com.morah.dto.encomendas.OcorrenciaCreateRequest;
+import br.com.morah.dto.encomendas.RetiradaConfirmRequest;
+import br.com.morah.dto.encomendas.StatusAutorizacaoRetirada;
+import br.com.morah.dto.encomendas.StatusEncomenda;
+import br.com.morah.dto.encomendas.StatusOcorrencia;
 import br.com.morah.exception.ApiException;
-import br.com.morah.model.AutorizacaoRetirada;
-import br.com.morah.model.Encomenda;
-import br.com.morah.model.Ocorrencia;
-import br.com.morah.model.Unidade;
-import br.com.morah.pattern.GeradorCodigo;
-import br.com.morah.pattern.NotificacaoEncomenda;
-import br.com.morah.repository.AutorizacaoRetiradaRepository;
-import br.com.morah.repository.EncomendaRepository;
-import br.com.morah.repository.OcorrenciaRepository;
-import br.com.morah.repository.PessoaPerfilRepository;
-import br.com.morah.repository.UnidadeRepository;
+import br.com.morah.model.condominio.Unidade;
+import br.com.morah.model.encomendas.AutorizacaoRetirada;
+import br.com.morah.model.encomendas.Encomenda;
+import br.com.morah.model.encomendas.Ocorrencia;
+import br.com.morah.pattern.singleton.GeradorCodigo;
+import br.com.morah.pattern.templatemethod.notificacao.NotificacaoEncomenda;
+import br.com.morah.repository.condominio.UnidadeRepository;
+import br.com.morah.repository.encomendas.AutorizacaoRetiradaRepository;
+import br.com.morah.repository.encomendas.EncomendaRepository;
+import br.com.morah.repository.encomendas.OcorrenciaRepository;
+import br.com.morah.repository.login.PessoaPerfilRepository;
 import br.com.morah.security.UsuarioLogado;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,13 +61,13 @@ public class EncomendaService {
         Long unidadeId = usuario.isMoradorOuProprietario() ? usuario.unidadeId() : null;
         Page<Encomenda> pagina = encomendaRepository.buscarComFiltros(usuario.condominioId(), unidadeId, status,
                 PageRequest.of(page, size));
-        return new EncomendaPage(pagina.getContent().stream().map(br.com.morah.dto.Encomenda::de).toList(),
+        return new EncomendaPage(pagina.getContent().stream().map(br.com.morah.dto.encomendas.Encomenda::de).toList(),
                 PageMetadata.de(pagina));
     }
 
     /** Nasce aguardando retirada, com código de 6 dígitos; os moradores da unidade são avisados. */
     @Transactional
-    public br.com.morah.dto.Encomenda criarEncomenda(UsuarioLogado usuario, EncomendaCreateRequest request) {
+    public br.com.morah.dto.encomendas.Encomenda criarEncomenda(UsuarioLogado usuario, EncomendaCreateRequest request) {
         Unidade unidade = unidadeRepository.findByIdAndBlocoCondominioId(request.unidadeId(), usuario.condominioId())
                 .orElseThrow(() -> ApiException.naoEncontrado("Unidade não encontrada"));
 
@@ -83,16 +83,16 @@ public class EncomendaService {
         encomendaRepository.save(encomenda);
 
         notificacaoEncomenda.notificar(encomenda, pessoaPerfilRepository.findMoradoresByUnidadeId(unidade.getId()));
-        return br.com.morah.dto.Encomenda.de(encomenda);
+        return br.com.morah.dto.encomendas.Encomenda.de(encomenda);
     }
 
     @Transactional(readOnly = true)
-    public br.com.morah.dto.Encomenda buscarEncomenda(UsuarioLogado usuario, Long encomendaId) {
-        return br.com.morah.dto.Encomenda.de(buscarDoCondominio(usuario, encomendaId));
+    public br.com.morah.dto.encomendas.Encomenda buscarEncomenda(UsuarioLogado usuario, Long encomendaId) {
+        return br.com.morah.dto.encomendas.Encomenda.de(buscarDoCondominio(usuario, encomendaId));
     }
 
     @Transactional
-    public br.com.morah.dto.AutorizacaoRetirada autorizarRetiradaTerceiro(UsuarioLogado usuario, Long encomendaId,
+    public br.com.morah.dto.encomendas.AutorizacaoRetirada autorizarRetiradaTerceiro(UsuarioLogado usuario, Long encomendaId,
                                                                           AutorizacaoRetiradaCreateRequest request) {
         Encomenda encomenda = buscarDoCondominio(usuario, encomendaId);
         usuario.verificarUnidade(encomenda.getUnidade().getId());
@@ -105,12 +105,12 @@ public class EncomendaService {
         autorizacao.setCodigo(GeradorCodigo.getInstance().gerarCodigo());
         autorizacao.setValidade(Instant.now().plus(Duration.ofHours(horas)));
         autorizacao.setStatus(StatusAutorizacaoRetirada.ATIVA);
-        return br.com.morah.dto.AutorizacaoRetirada.de(autorizacaoRetiradaRepository.save(autorizacao));
+        return br.com.morah.dto.encomendas.AutorizacaoRetirada.de(autorizacaoRetiradaRepository.save(autorizacao));
     }
 
     /** Aceita o código da encomenda ou o de uma autorização de terceiro ativa e válida (que vira "utilizada"). */
     @Transactional
-    public br.com.morah.dto.Encomenda confirmarRetirada(UsuarioLogado usuario, Long encomendaId, RetiradaConfirmRequest request) {
+    public br.com.morah.dto.encomendas.Encomenda confirmarRetirada(UsuarioLogado usuario, Long encomendaId, RetiradaConfirmRequest request) {
         Encomenda encomenda = buscarDoCondominio(usuario, encomendaId);
         if (encomenda.getStatus() != StatusEncomenda.AGUARDANDO_RETIRADA) {
             throw ApiException.conflito("Encomenda já retirada ou extraviada");
@@ -128,12 +128,12 @@ public class EncomendaService {
 
         encomenda.setStatus(StatusEncomenda.RETIRADA);
         encomenda.setRetiradaEm(Instant.now());
-        return br.com.morah.dto.Encomenda.de(encomenda);
+        return br.com.morah.dto.encomendas.Encomenda.de(encomenda);
     }
 
     /** Cria a ocorrência aberta e marca a encomenda como extraviada. */
     @Transactional
-    public br.com.morah.dto.Ocorrencia abrirOcorrencia(UsuarioLogado usuario, Long encomendaId, OcorrenciaCreateRequest request) {
+    public br.com.morah.dto.encomendas.Ocorrencia abrirOcorrencia(UsuarioLogado usuario, Long encomendaId, OcorrenciaCreateRequest request) {
         Encomenda encomenda = buscarDoCondominio(usuario, encomendaId);
         usuario.verificarUnidade(encomenda.getUnidade().getId());
 
@@ -147,7 +147,7 @@ public class EncomendaService {
         ocorrenciaRepository.save(ocorrencia);
 
         encomenda.setStatus(StatusEncomenda.EXTRAVIADA);
-        return br.com.morah.dto.Ocorrencia.de(ocorrencia);
+        return br.com.morah.dto.encomendas.Ocorrencia.de(ocorrencia);
     }
 
     private Encomenda buscarDoCondominio(UsuarioLogado usuario, Long encomendaId) {

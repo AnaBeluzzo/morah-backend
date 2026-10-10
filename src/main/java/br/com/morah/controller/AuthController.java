@@ -1,11 +1,11 @@
 package br.com.morah.controller;
 
-import br.com.morah.dto.ContextoAtivoResponse;
-import br.com.morah.dto.ContextoRequest;
-import br.com.morah.dto.LoginRequest;
-import br.com.morah.dto.LoginResponse;
-import br.com.morah.dto.MeResponse;
-import br.com.morah.dto.RefreshRequest;
+import br.com.morah.dto.login.ContextoAtivoResponse;
+import br.com.morah.dto.login.ContextoRequest;
+import br.com.morah.dto.login.LoginRequest;
+import br.com.morah.dto.login.LoginResponse;
+import br.com.morah.dto.login.MeResponse;
+import br.com.morah.dto.login.RefreshRequest;
 import br.com.morah.security.UsuarioLogado;
 import br.com.morah.service.AuthService;
 import jakarta.validation.Valid;
