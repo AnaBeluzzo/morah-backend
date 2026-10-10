@@ -35,6 +35,13 @@ public record UsuarioLogado(Long pessoaId, String sessaoId, Perfil perfil, Long 
         return perfil == Perfil.MORADOR || perfil == Perfil.PROPRIETARIO;
     }
 
+    /** Escopo de unidade: morador/proprietário acessando recurso de outra unidade → 403. */
+    public void verificarUnidade(Long unidadeDoRecurso) {
+        if (isMoradorOuProprietario() && !unidadeDoRecurso.equals(unidadeId)) {
+            throw ApiException.proibido("Recurso de outra unidade");
+        }
+    }
+
     private static Long comoLong(Object valor) {
         return valor == null ? null : ((Number) valor).longValue();
     }

@@ -24,3 +24,12 @@ INSERT OR IGNORE INTO pessoa_perfil (id, pessoa_id, perfil, condominio_id, unida
 -- ===== Avisos: um aviso para todo o condomínio
 INSERT OR IGNORE INTO aviso (id, condominio_id, titulo, conteudo, categoria, prioridade, publico_tipo, autor_id, publicado_em, expira_em)
 VALUES (1, 1, 'Bem-vindos ao Morah', 'Este é o novo canal de comunicação do condomínio.', 'geral', 'NORMAL', 'CONDOMINIO', 1, '2026-10-01 12:00:00.000', NULL);
+
+-- ===== Financeiro: taxa da competência 2026-09 e uma cobrança por unidade
+INSERT OR IGNORE INTO taxa (id, condominio_id, descricao, competencia, valor, tipo_rateio, vencimento_dia)
+VALUES (1, 1, 'Taxa condominial', '2026-09', 1000.00, 'IGUALITARIO', 10);
+
+INSERT OR IGNORE INTO cobranca (id, unidade_id, taxa_id, competencia, vencimento, valor_original, multa, juros, status)
+VALUES (1, 1, 1, '2026-09', '2026-09-10 00:00:00.000', 500.00, 0, 0, 'PENDENTE');
+INSERT OR IGNORE INTO cobranca (id, unidade_id, taxa_id, competencia, vencimento, valor_original, multa, juros, status)
+VALUES (2, 2, 1, '2026-09', '2026-09-10 00:00:00.000', 500.00, 0, 0, 'PENDENTE');
