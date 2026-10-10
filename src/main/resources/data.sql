@@ -33,3 +33,9 @@ INSERT OR IGNORE INTO cobranca (id, unidade_id, taxa_id, competencia, vencimento
 VALUES (1, 1, 1, '2026-09', '2026-09-10 00:00:00.000', 500.00, 0, 0, 'PENDENTE');
 INSERT OR IGNORE INTO cobranca (id, unidade_id, taxa_id, competencia, vencimento, valor_original, multa, juros, status)
 VALUES (2, 2, 1, '2026-09', '2026-09-10 00:00:00.000', 500.00, 0, 0, 'PENDENTE');
+
+-- ===== Portaria: um visitante com autorização pendente para o Apto 302
+-- solicitado_em = momento da primeira execução (UTC); depois de 30 minutos ela aparece como "expirada"
+INSERT OR IGNORE INTO visitante (id, condominio_id, nome) VALUES (1, 1, 'Marcos Silva');
+INSERT OR IGNORE INTO autorizacao_visita (id, visitante_id, unidade_id, motivo, solicitado_em, status)
+VALUES (1, 1, 1, 'Visita', strftime('%Y-%m-%d %H:%M:%f', 'now'), 'PENDENTE');
