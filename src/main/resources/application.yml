@@ -25,6 +25,10 @@ spring:
   sql:
     init:
       mode: always
+  web:
+    # mensagens do Bean Validation sempre em português
+    locale: pt_BR
+    locale-resolver: fixed
   jackson:
     # campos nulos não aparecem no JSON
     default-property-inclusion: non_null
