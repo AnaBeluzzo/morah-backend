@@ -145,6 +145,9 @@ src/main/java/br/com/morah
 Os testes unitários dos patterns ficam no mesmo pacote da classe testada (ex.:
 `src/test/java/br/com/morah/pattern/singleton/GeradorCodigoTest.java`).
 
+A documentação completa, com os diagramas em Mermaid, está em
+[`docs/documentacao.md`](docs/documentacao.md).
+
 ## Endpoints → classe e método
 
 | Endpoint | Classe | Método |
