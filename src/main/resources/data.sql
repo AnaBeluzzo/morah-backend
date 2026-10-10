@@ -43,3 +43,7 @@ VALUES (1, 1, 1, 'Visita', strftime('%Y-%m-%d %H:%M:%f', 'now'), 'PENDENTE');
 -- ===== Reservas: uma área comum
 INSERT OR IGNORE INTO area_comum (id, condominio_id, nome, capacidade, taxa, requer_reserva, status)
 VALUES (1, 1, 'Salão de festas', 80, 150.00, 1, 'disponivel');
+
+-- ===== Encomendas: uma encomenda aguardando retirada no Apto 302
+INSERT OR IGNORE INTO encomenda (id, unidade_id, transportadora, codigo_retirada, recebida_em, status)
+VALUES (1, 1, 'Correios', '482913', strftime('%Y-%m-%d %H:%M:%f', 'now'), 'AGUARDANDO_RETIRADA');

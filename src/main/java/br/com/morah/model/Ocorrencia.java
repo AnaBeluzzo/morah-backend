@@ -32,6 +32,10 @@ public class Ocorrencia {
     @ManyToOne
     private Reserva reserva;
 
+    // preenchida quando a ocorrência é de extravio de encomenda
+    @ManyToOne
+    private Encomenda encomenda;
+
     private String titulo;
 
     private String descricao;
