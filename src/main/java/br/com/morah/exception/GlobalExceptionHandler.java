@@ -1,5 +1,6 @@
 package br.com.morah.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -63,6 +64,15 @@ public class GlobalExceptionHandler {
                 .flatMap(resultado -> resultado.getResolvableErrors().stream()
                         .map(erro -> erroCampo(resultado.getMethodParameter().getParameterName(),
                                 erro.getDefaultMessage())))
+                .toList();
+        return criarProblemaValidacao(erros);
+    }
+
+    /** Validação feita "na mão" com o Validator (PATCH de personalização). */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ProblemDetail tratarViolacoes(ConstraintViolationException e) {
+        List<Map<String, String>> erros = e.getConstraintViolations().stream()
+                .map(violacao -> erroCampo(violacao.getPropertyPath().toString(), violacao.getMessage()))
                 .toList();
         return criarProblemaValidacao(erros);
     }

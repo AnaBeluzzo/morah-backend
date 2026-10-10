@@ -47,3 +47,14 @@ VALUES (1, 1, 'Salão de festas', 80, 150.00, 1, 'disponivel');
 -- ===== Encomendas: uma encomenda aguardando retirada no Apto 302
 INSERT OR IGNORE INTO encomenda (id, unidade_id, transportadora, codigo_retirada, recebida_em, status)
 VALUES (1, 1, 'Correios', '482913', strftime('%Y-%m-%d %H:%M:%f', 'now'), 'AGUARDANDO_RETIRADA');
+
+-- ===== Personalização: identidade visual e os seis módulos ativos
+INSERT OR IGNORE INTO personalizacao (id, condominio_id, nome_exibicao, logo_url, cor_primaria, cor_secundaria, cor_destaque, atualizado_em)
+VALUES (1, 1, 'Condomínio Demo', NULL, '#1F4E79', '#F2F4F7', '#F59E0B', '2026-10-01 12:00:00.000');
+
+INSERT OR IGNORE INTO modulo_condominio (id, condominio_id, modulo, ativo, atualizado_em) VALUES (1, 1, 'FINANCEIRO', 1, '2026-10-01 12:00:00.000');
+INSERT OR IGNORE INTO modulo_condominio (id, condominio_id, modulo, ativo, atualizado_em) VALUES (2, 1, 'PORTARIA', 1, '2026-10-01 12:00:00.000');
+INSERT OR IGNORE INTO modulo_condominio (id, condominio_id, modulo, ativo, atualizado_em) VALUES (3, 1, 'AVISOS', 1, '2026-10-01 12:00:00.000');
+INSERT OR IGNORE INTO modulo_condominio (id, condominio_id, modulo, ativo, atualizado_em) VALUES (4, 1, 'RESERVAS', 1, '2026-10-01 12:00:00.000');
+INSERT OR IGNORE INTO modulo_condominio (id, condominio_id, modulo, ativo, atualizado_em) VALUES (5, 1, 'MINHA_UNIDADE', 1, '2026-10-01 12:00:00.000');
+INSERT OR IGNORE INTO modulo_condominio (id, condominio_id, modulo, ativo, atualizado_em) VALUES (6, 1, 'ENCOMENDAS', 1, '2026-10-01 12:00:00.000');
