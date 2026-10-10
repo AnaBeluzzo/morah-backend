@@ -1,0 +1,9 @@
+# os testes usam um SQLite separado, recriado a cada "mvn clean test"
+spring:
+  datasource:
+    url: jdbc:sqlite:target/test.db?date_class=TEXT&date_string_format=yyyy-MM-dd HH:mm:ss.SSS
+  main:
+    banner-mode: off
+logging:
+  level:
+    root: WARN

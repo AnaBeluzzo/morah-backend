@@ -1,0 +1,18 @@
+# build do Maven
+target/
+
+# banco SQLite local
+morah.db
+*.db-journal
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# sistema operacional
+.DS_Store
+Thumbs.db
