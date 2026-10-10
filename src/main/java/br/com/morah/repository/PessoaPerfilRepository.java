@@ -21,6 +21,8 @@ public interface PessoaPerfilRepository extends JpaRepository<PessoaPerfil, Long
 
     List<PessoaPerfil> findByUnidadeId(Long unidadeId);
 
+    void deleteByPessoaIdAndUnidadeIdAndPerfil(Long pessoaId, Long unidadeId, Perfil perfil);
+
     /** Moradores (morador ou proprietário) de uma unidade, sem repetição: destinatários das notificações. */
     @Query("select distinct pp.pessoa from PessoaPerfil pp where pp.unidade.id = :unidadeId")
     List<Pessoa> findMoradoresByUnidadeId(Long unidadeId);
