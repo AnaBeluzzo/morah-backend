@@ -20,3 +20,7 @@ INSERT OR IGNORE INTO pessoa_perfil (id, pessoa_id, perfil, condominio_id, unida
 INSERT OR IGNORE INTO pessoa_perfil (id, pessoa_id, perfil, condominio_id, unidade_id) VALUES (2, 2, 'PROPRIETARIO', 1, 1);
 INSERT OR IGNORE INTO pessoa_perfil (id, pessoa_id, perfil, condominio_id, unidade_id) VALUES (3, 3, 'MORADOR', 1, 2);
 INSERT OR IGNORE INTO pessoa_perfil (id, pessoa_id, perfil, condominio_id, unidade_id) VALUES (4, 4, 'PORTARIA', 1, NULL);
+
+-- ===== Avisos: um aviso para todo o condomínio
+INSERT OR IGNORE INTO aviso (id, condominio_id, titulo, conteudo, categoria, prioridade, publico_tipo, autor_id, publicado_em, expira_em)
+VALUES (1, 1, 'Bem-vindos ao Morah', 'Este é o novo canal de comunicação do condomínio.', 'geral', 'NORMAL', 'CONDOMINIO', 1, '2026-10-01 12:00:00.000', NULL);

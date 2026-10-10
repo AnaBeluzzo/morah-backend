@@ -12,4 +12,10 @@ public interface PessoaPerfilRepository extends JpaRepository<PessoaPerfil, Long
     List<PessoaPerfil> findByPessoaIdOrderById(Long pessoaId);
 
     Optional<PessoaPerfil> findFirstByPessoaIdAndCondominioIdAndPerfilOrderById(Long pessoaId, Long condominioId, Perfil perfil);
+
+    List<PessoaPerfil> findByCondominioId(Long condominioId);
+
+    List<PessoaPerfil> findByUnidadeBlocoId(Long blocoId);
+
+    List<PessoaPerfil> findByUnidadeId(Long unidadeId);
 }
