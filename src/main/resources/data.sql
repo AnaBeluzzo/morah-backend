@@ -39,3 +39,7 @@ VALUES (2, 2, 1, '2026-09', '2026-09-10 00:00:00.000', 500.00, 0, 0, 'PENDENTE')
 INSERT OR IGNORE INTO visitante (id, condominio_id, nome) VALUES (1, 1, 'Marcos Silva');
 INSERT OR IGNORE INTO autorizacao_visita (id, visitante_id, unidade_id, motivo, solicitado_em, status)
 VALUES (1, 1, 1, 'Visita', strftime('%Y-%m-%d %H:%M:%f', 'now'), 'PENDENTE');
+
+-- ===== Reservas: uma área comum
+INSERT OR IGNORE INTO area_comum (id, condominio_id, nome, capacidade, taxa, requer_reserva, status)
+VALUES (1, 1, 'Salão de festas', 80, 150.00, 1, 'disponivel');
