@@ -7,11 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public interface EncomendaRepository extends JpaRepository<Encomenda, Long> {
 
     Optional<Encomenda> findByIdAndUnidadeBlocoCondominioId(Long id, Long condominioId);
+
+    long countByUnidadeBlocoCondominioIdAndRecebidaEmGreaterThanEqual(Long condominioId, Instant inicio);
 
     @Query("""
             select e from Encomenda e

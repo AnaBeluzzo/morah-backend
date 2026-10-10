@@ -12,4 +12,6 @@ public interface SolicitacaoVinculoRepository extends JpaRepository<SolicitacaoV
     List<SolicitacaoVinculo> findByUnidadeIdAndStatusOrderById(Long unidadeId, StatusSolicitacaoVinculo status);
 
     Optional<SolicitacaoVinculo> findByIdAndUnidadeId(Long id, Long unidadeId);
+
+    long countByUnidadeBlocoCondominioIdAndStatus(Long condominioId, StatusSolicitacaoVinculo status);
 }

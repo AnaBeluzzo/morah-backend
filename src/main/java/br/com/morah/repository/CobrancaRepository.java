@@ -19,6 +19,8 @@ public interface CobrancaRepository extends JpaRepository<Cobranca, Long> {
 
     boolean existsByTaxaIdAndUnidadeId(Long taxaId, Long unidadeId);
 
+    List<Cobranca> findByUnidadeIdAndStatusOrderByVencimentoAscIdAsc(Long unidadeId, StatusCobranca status, Pageable pageable);
+
     List<Cobranca> findByUnidadeBlocoCondominioIdAndStatus(Long condominioId, StatusCobranca status);
 
     /** Filtros opcionais (nulo = sem filtro). As datas permitem separar "pendente" de "atrasado". */

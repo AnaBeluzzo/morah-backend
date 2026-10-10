@@ -15,6 +15,9 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     Optional<Reserva> findByIdAndAreaComumCondominioId(Long id, Long condominioId);
 
+    List<Reserva> findByUnidadeIdAndStatusAndInicioGreaterThanEqualOrderByInicioAsc(Long unidadeId, StatusReserva status,
+                                                                                    Instant inicio, Pageable pageable);
+
     /** Sobreposição: começa antes do fim pedido e termina depois do início pedido. */
     boolean existsByAreaComumIdAndStatusAndInicioLessThanAndFimGreaterThan(Long areaComumId, StatusReserva status,
                                                                            Instant fim, Instant inicio);
