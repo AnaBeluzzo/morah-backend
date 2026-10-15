@@ -97,14 +97,8 @@ public class UnidadeService {
         inquilino.setTelefone(request.telefone());
         pessoaRepository.save(inquilino);
 
-        VinculoUnidade vinculo = new VinculoUnidade();
-        vinculo.setUnidade(unidade);
-        vinculo.setPessoa(inquilino);
-        vinculo.setTipoVinculo(TipoVinculo.INQUILINO);
-        vinculo.setPrincipal(false);
-        vinculo.setInicio(request.contratoInicio());
-        vinculo.setFim(request.contratoFim());
-        vinculoUnidadeRepository.save(vinculo);
+        VinculoUnidade vinculo = salvarVinculo(unidade, inquilino, TipoVinculo.INQUILINO,
+                request.contratoInicio(), request.contratoFim());
 
         PessoaPerfil perfil = new PessoaPerfil();
         perfil.setPessoa(inquilino);
@@ -161,13 +155,7 @@ public class UnidadeService {
             pessoa.setCpf(solicitacao.getCpf());
             pessoaRepository.save(pessoa);
 
-            VinculoUnidade vinculo = new VinculoUnidade();
-            vinculo.setUnidade(unidade);
-            vinculo.setPessoa(pessoa);
-            vinculo.setTipoVinculo(solicitacao.getTipoVinculo());
-            vinculo.setPrincipal(false);
-            vinculo.setInicio(LocalDate.now());
-            vinculoUnidadeRepository.save(vinculo);
+            salvarVinculo(unidade, pessoa, solicitacao.getTipoVinculo(), LocalDate.now(), null);
             solicitacao.setStatus(StatusSolicitacaoVinculo.APROVADA);
         } else {
             solicitacao.setStatus(StatusSolicitacaoVinculo.REJEITADA);
@@ -175,9 +163,19 @@ public class UnidadeService {
         return br.com.morah.dto.minhaunidade.SolicitacaoVinculo.de(solicitacao);
     }
 
-    /** Unidade de outro condomínio (ou inexistente) → 404. */
     private Unidade buscarDoCondominio(UsuarioLogado usuario, Long unidadeId) {
-        return unidadeRepository.findByIdAndBlocoCondominioId(unidadeId, usuario.condominioId())
-                .orElseThrow(() -> ApiException.naoEncontrado("Unidade não encontrada"));
+        return unidadeRepository.buscarDoCondominio(unidadeId, usuario.condominioId());
+    }
+
+    /** Vínculo não principal; fim nulo = sem data de término. */
+    private VinculoUnidade salvarVinculo(Unidade unidade, Pessoa pessoa, TipoVinculo tipo, LocalDate inicio, LocalDate fim) {
+        VinculoUnidade vinculo = new VinculoUnidade();
+        vinculo.setUnidade(unidade);
+        vinculo.setPessoa(pessoa);
+        vinculo.setTipoVinculo(tipo);
+        vinculo.setPrincipal(false);
+        vinculo.setInicio(inicio);
+        vinculo.setFim(fim);
+        return vinculoUnidadeRepository.save(vinculo);
     }
 }

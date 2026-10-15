@@ -48,4 +48,15 @@ public class Ocorrencia {
     private Instant abertaEm;
 
     private Instant encerradaEm;
+
+    /** Ocorrência aberta agora; quem chama liga à reserva ou à encomenda de origem. */
+    public static Ocorrencia aberta(Condominio condominio, String titulo, String descricao) {
+        Ocorrencia ocorrencia = new Ocorrencia();
+        ocorrencia.setCondominio(condominio);
+        ocorrencia.setTitulo(titulo);
+        ocorrencia.setDescricao(descricao);
+        ocorrencia.setStatus(StatusOcorrencia.ABERTA);
+        ocorrencia.setAbertaEm(Instant.now());
+        return ocorrencia;
+    }
 }

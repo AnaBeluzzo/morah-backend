@@ -8,7 +8,6 @@ import br.com.morah.dto.encomendas.OcorrenciaCreateRequest;
 import br.com.morah.dto.encomendas.RetiradaConfirmRequest;
 import br.com.morah.dto.encomendas.StatusAutorizacaoRetirada;
 import br.com.morah.dto.encomendas.StatusEncomenda;
-import br.com.morah.dto.encomendas.StatusOcorrencia;
 import br.com.morah.exception.ApiException;
 import br.com.morah.model.condominio.Unidade;
 import br.com.morah.model.encomendas.AutorizacaoRetirada;
@@ -61,15 +60,13 @@ public class EncomendaService {
         Long unidadeId = usuario.isMoradorOuProprietario() ? usuario.unidadeId() : null;
         Page<Encomenda> pagina = encomendaRepository.buscarComFiltros(usuario.condominioId(), unidadeId, status,
                 PageRequest.of(page, size));
-        return new EncomendaPage(pagina.getContent().stream().map(br.com.morah.dto.encomendas.Encomenda::de).toList(),
-                PageMetadata.de(pagina));
+        return PageMetadata.paginar(pagina, br.com.morah.dto.encomendas.Encomenda::de, EncomendaPage::new);
     }
 
     /** Nasce aguardando retirada, com código de 6 dígitos; os moradores da unidade são avisados. */
     @Transactional
     public br.com.morah.dto.encomendas.Encomenda criarEncomenda(UsuarioLogado usuario, EncomendaCreateRequest request) {
-        Unidade unidade = unidadeRepository.findByIdAndBlocoCondominioId(request.unidadeId(), usuario.condominioId())
-                .orElseThrow(() -> ApiException.naoEncontrado("Unidade não encontrada"));
+        Unidade unidade = unidadeRepository.buscarDoCondominio(request.unidadeId(), usuario.condominioId());
 
         Encomenda encomenda = new Encomenda();
         encomenda.setUnidade(unidade);
@@ -137,13 +134,9 @@ public class EncomendaService {
         Encomenda encomenda = buscarDoCondominio(usuario, encomendaId);
         usuario.verificarUnidade(encomenda.getUnidade().getId());
 
-        Ocorrencia ocorrencia = new Ocorrencia();
-        ocorrencia.setCondominio(encomenda.getUnidade().getBloco().getCondominio());
+        Ocorrencia ocorrencia = Ocorrencia.aberta(encomenda.getUnidade().getBloco().getCondominio(),
+                request.titulo(), request.descricao());
         ocorrencia.setEncomenda(encomenda);
-        ocorrencia.setTitulo(request.titulo());
-        ocorrencia.setDescricao(request.descricao());
-        ocorrencia.setStatus(StatusOcorrencia.ABERTA);
-        ocorrencia.setAbertaEm(Instant.now());
         ocorrenciaRepository.save(ocorrencia);
 
         encomenda.setStatus(StatusEncomenda.EXTRAVIADA);

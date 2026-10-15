@@ -61,10 +61,7 @@ public class AvisoService {
         Long blocoId = todos ? null : blocoDaUnidade(usuario.unidadeId());
         Page<Aviso> pagina = avisoRepository.buscarVigentes(usuario.condominioId(), Instant.now(), categoria, prioridade,
                 todos, blocoId, usuario.unidadeId(), PageRequest.of(page, size));
-        List<br.com.morah.dto.avisos.Aviso> avisos = pagina.getContent().stream()
-                .map(aviso -> paraDto(aviso, usuario))
-                .toList();
-        return new AvisoPage(avisos, PageMetadata.de(pagina));
+        return PageMetadata.paginar(pagina, aviso -> paraDto(aviso, usuario), AvisoPage::new);
     }
 
     @Transactional

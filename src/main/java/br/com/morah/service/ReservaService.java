@@ -1,7 +1,6 @@
 package br.com.morah.service;
 
 import br.com.morah.dto.comum.PageMetadata;
-import br.com.morah.dto.encomendas.StatusOcorrencia;
 import br.com.morah.dto.login.Perfil;
 import br.com.morah.dto.reservas.Disponibilidade;
 import br.com.morah.dto.reservas.HorarioDisponivel;
@@ -99,8 +98,7 @@ public class ReservaService {
 
         Page<Reserva> pagina = reservaRepository.buscarComFiltros(usuario.condominioId(), unidadeId, inicio, fim,
                 PageRequest.of(page, size));
-        return new ReservaPage(pagina.getContent().stream().map(br.com.morah.dto.reservas.Reserva::de).toList(),
-                PageMetadata.de(pagina));
+        return PageMetadata.paginar(pagina, br.com.morah.dto.reservas.Reserva::de, ReservaPage::new);
     }
 
     /** Nasce confirmada, com valor = taxa da área; unidade e solicitante vêm do token. */
@@ -160,13 +158,10 @@ public class ReservaService {
         vistoriaRepository.save(vistoria);
 
         if (dano) {
-            Ocorrencia ocorrencia = new Ocorrencia();
-            ocorrencia.setCondominio(reserva.getAreaComum().getCondominio());
+            Ocorrencia ocorrencia = Ocorrencia.aberta(reserva.getAreaComum().getCondominio(),
+                    "Dano em " + reserva.getAreaComum().getNome(),
+                    request.observacao() == null ? "Dano registrado na vistoria" : request.observacao());
             ocorrencia.setReserva(reserva);
-            ocorrencia.setTitulo("Dano em " + reserva.getAreaComum().getNome());
-            ocorrencia.setDescricao(request.observacao() == null ? "Dano registrado na vistoria" : request.observacao());
-            ocorrencia.setStatus(StatusOcorrencia.ABERTA);
-            ocorrencia.setAbertaEm(Instant.now());
             ocorrenciaRepository.save(ocorrencia);
         }
         if (request.momento() == MomentoVistoria.SAIDA) {

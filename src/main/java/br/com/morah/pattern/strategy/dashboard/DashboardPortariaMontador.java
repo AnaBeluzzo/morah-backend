@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 
 /** Tela inicial da portaria: fila da guarita, reservas do dia e encomendas recebidas hoje. */
@@ -54,7 +53,7 @@ public class DashboardPortariaMontador implements MontadorDashboard {
                         : List.of(),
                 ativo(condominioId, ModuloCodigo.ENCOMENDAS)
                         ? encomendaRepository.countByUnidadeBlocoCondominioIdAndRecebidaEmGreaterThanEqual(
-                                condominioId, hoje.atStartOfDay(ZoneId.systemDefault()).toInstant())
+                                condominioId, ReservaService.horario(hoje, 0))
                         : 0);
     }
 

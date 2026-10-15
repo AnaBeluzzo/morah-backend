@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 
 @Service
 public class PortariaService {
@@ -60,8 +59,7 @@ public class PortariaService {
     /** Cria o visitante e a autorização pendente, e avisa os moradores da unidade. */
     @Transactional
     public br.com.morah.dto.portaria.AutorizacaoVisita registrarVisitante(UsuarioLogado usuario, AutorizacaoVisitaCreateRequest request) {
-        Unidade unidade = unidadeRepository.findByIdAndBlocoCondominioId(request.unidadeId(), usuario.condominioId())
-                .orElseThrow(() -> ApiException.naoEncontrado("Unidade não encontrada"));
+        Unidade unidade = unidadeRepository.buscarDoCondominio(request.unidadeId(), usuario.condominioId());
 
         Visitante visitante = new Visitante();
         visitante.setCondominio(condominioRepository.getReferenceById(usuario.condominioId()));
@@ -95,8 +93,7 @@ public class PortariaService {
 
         Page<AutorizacaoVisita> pagina = autorizacaoVisitaRepository.buscarComFiltros(usuario.condominioId(), unidadeId,
                 statusGravado, solicitadoAntesDe, solicitadoAPartirDe, PageRequest.of(page, size));
-        return new AutorizacaoVisitaPage(pagina.getContent().stream().map(br.com.morah.dto.portaria.AutorizacaoVisita::de).toList(),
-                PageMetadata.de(pagina));
+        return PageMetadata.paginar(pagina, br.com.morah.dto.portaria.AutorizacaoVisita::de, AutorizacaoVisitaPage::new);
     }
 
     @Transactional(readOnly = true)
@@ -135,10 +132,10 @@ public class PortariaService {
     /** Histórico do condomínio; com "data", só as entradas daquele dia (fuso do servidor). */
     @Transactional(readOnly = true)
     public AcessoPage buscarAcessos(UsuarioLogado usuario, LocalDate data, int page, int size) {
-        Instant inicio = data == null ? null : data.atStartOfDay(ZoneId.systemDefault()).toInstant();
-        Instant fim = data == null ? null : data.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Instant inicio = data == null ? null : ReservaService.horario(data, 0);
+        Instant fim = data == null ? null : ReservaService.horario(data.plusDays(1), 0);
         Page<Acesso> pagina = acessoRepository.buscarDoCondominio(usuario.condominioId(), inicio, fim, PageRequest.of(page, size));
-        return new AcessoPage(pagina.getContent().stream().map(br.com.morah.dto.portaria.Acesso::de).toList(), PageMetadata.de(pagina));
+        return PageMetadata.paginar(pagina, br.com.morah.dto.portaria.Acesso::de, AcessoPage::new);
     }
 
     /** "entrada" abre um acesso; "saida" fecha o último acesso aberto do visitante. */

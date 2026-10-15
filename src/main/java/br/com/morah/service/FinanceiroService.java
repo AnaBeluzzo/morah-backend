@@ -93,8 +93,7 @@ public class FinanceiroService {
 
         Page<Cobranca> pagina = cobrancaRepository.buscarComFiltros(usuario.condominioId(), unidadeFiltro, competencia,
                 statusGravado, vencidoAntesDe, venceAPartirDe, PageRequest.of(page, size));
-        return new CobrancaPage(pagina.getContent().stream().map(br.com.morah.dto.financeiro.Cobranca::de).toList(),
-                PageMetadata.de(pagina));
+        return PageMetadata.paginar(pagina, br.com.morah.dto.financeiro.Cobranca::de, CobrancaPage::new);
     }
 
     @Transactional(readOnly = true)
@@ -134,8 +133,7 @@ public class FinanceiroService {
     public DocumentoFinanceiroPage buscarDocumentosFinanceiros(UsuarioLogado usuario, int page, int size) {
         Page<DocumentoFinanceiro> pagina = documentoFinanceiroRepository
                 .findByCondominioIdOrderByPublicadoEmDescIdDesc(usuario.condominioId(), PageRequest.of(page, size));
-        return new DocumentoFinanceiroPage(pagina.getContent().stream().map(br.com.morah.dto.financeiro.DocumentoFinanceiro::de).toList(),
-                PageMetadata.de(pagina));
+        return PageMetadata.paginar(pagina, br.com.morah.dto.financeiro.DocumentoFinanceiro::de, DocumentoFinanceiroPage::new);
     }
 
     @Transactional
