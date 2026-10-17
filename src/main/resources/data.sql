@@ -48,6 +48,9 @@ VALUES (1, 1, 'Salão de festas', 80, 150.00, 1, 'disponivel');
 INSERT OR IGNORE INTO encomenda (id, unidade_id, transportadora, codigo_retirada, recebida_em, status)
 VALUES (1, 1, 'Correios', '482913', strftime('%Y-%m-%d %H:%M:%f', 'now'), 'AGUARDANDO_RETIRADA');
 
+-- ===== Minha Unidade: um carro no Apto 302 (tabela database first, criada pelo schema.sql)
+INSERT OR IGNORE INTO veiculo (id, unidade_id, placa, modelo, cor, tipo) VALUES (1, 1, 'ABC1D23', 'Fiat Argo', 'Prata', 'CARRO');
+
 -- ===== Personalização: identidade visual e os seis módulos ativos
 INSERT OR IGNORE INTO personalizacao (id, condominio_id, nome_exibicao, logo_url, cor_primaria, cor_secundaria, cor_destaque, atualizado_em)
 VALUES (1, 1, 'Condomínio Demo', NULL, '#1F4E79', '#F2F4F7', '#F59E0B', '2026-10-01 12:00:00.000');
