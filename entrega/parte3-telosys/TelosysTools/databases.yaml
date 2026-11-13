@@ -1,0 +1,17 @@
+# Telosys: banco de origem do Database First (o SQLite do morah-backend)
+databases :
+
+  - id: morah
+    name: Morah (SQLite do backend)
+    type: SQLITE
+    driver: org.sqlite.JDBC
+    # banco criado pelo morah-backend (mvn spring-boot:run) na raiz do projeto
+    url: jdbc:sqlite:../../morah.db
+    # Metadata parameters
+    tableNamePattern: '%'
+    tableNameExclude: 'sqlite_%'
+    tableTypes: TABLE
+    #--- Telosys model creation
+    linksManyToOne: true
+    linksOneToMany: false
+    linksManyToMany: false

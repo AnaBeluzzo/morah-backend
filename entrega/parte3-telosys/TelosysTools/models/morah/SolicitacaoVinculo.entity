@@ -1,0 +1,12 @@
+@DbTable(solicitacao_vinculo)
+SolicitacaoVinculo {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  cpf : string { @DbName(cpf) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  nomeSolicitado : string { @DbName(nome_solicitado) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  solicitadoEm : string { @DbName(solicitado_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  tipoVinculo : string { @DbName(tipo_vinculo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  unidadeId : int { @DbName(unidade_id) @DbType(BIGINT) };
+  // links
+}

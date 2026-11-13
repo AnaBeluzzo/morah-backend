@@ -1,0 +1,10 @@
+@DbTable(modulo_condominio)
+ModuloCondominio {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  ativo : int { @DbName(ativo) @DbType(BOOLEAN) @NotNull @NotEmpty };
+  atualizadoEm : string { @DbName(atualizado_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  modulo : string { @DbName(modulo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  // links
+}

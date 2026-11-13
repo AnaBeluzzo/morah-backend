@@ -1,0 +1,12 @@
+@DbTable(autorizacao_visita)
+AutorizacaoVisita {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  motivo : string { @DbName(motivo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  respondidoEm : string { @DbName(respondido_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  solicitadoEm : string { @DbName(solicitado_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  unidadeId : int { @DbName(unidade_id) @DbType(BIGINT) };
+  visitanteId : int { @DbName(visitante_id) @DbType(BIGINT) };
+  // links
+}

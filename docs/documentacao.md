@@ -5,7 +5,7 @@ do 6º período de Engenharia de Software). Os diagramas estão em [Mermaid](htt
 e são renderizados direto no GitHub, no GitLab e no IntelliJ (plugin Mermaid).
 
 O contrato da API é o [`morah-openapi.yaml`](../morah-openapi.yaml) ("Morah API — Gestão
-Condominial", v2.0.0). Como rodar e testar está no [`README.md`](../README.md).
+Condominial", v2.1.0). Como rodar e testar está no [`README.md`](../README.md).
 
 ## Sumário
 
@@ -502,8 +502,20 @@ erDiagram
     }
     UNIDADE ||--o{ VINCULO_UNIDADE : vinculos
     PESSOA ||--o{ VINCULO_UNIDADE : vinculada
+    VEICULO {
+        integer id PK
+        integer unidade_id FK
+        varchar placa "UNIQUE, ABC1234 ou ABC1D23"
+        varchar modelo
+        varchar cor
+        varchar tipo "CHECK: CARRO, MOTO"
+    }
     UNIDADE ||--o{ SOLICITACAO_VINCULO : solicitacoes
+    UNIDADE ||--o{ VEICULO : veiculos
 ```
+
+A tabela `veiculo` é **database first**: o DDL está em `src/main/resources/schema.sql` e a entidade
+`Veiculo` foi mapeada a partir dele (ver [`database-first-veiculos.md`](database-first-veiculos.md)).
 
 ### 8.4 Financeiro
 

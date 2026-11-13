@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutorizacaoVisita | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "autorizacao_visita" -->
+  <header><a href="../index.html">← Tabelas</a><h1>AutorizacaoVisita</h1><small>tabela autorizacao_visita</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'AutorizacaoVisita',
+      recurso: '/api/autorizacaovisita',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'motivo', coluna: 'motivo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'respondidoEm', coluna: 'respondido_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'solicitadoEm', coluna: 'solicitado_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'status', coluna: 'status', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'unidadeId', coluna: 'unidade_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'visitanteId', coluna: 'visitante_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

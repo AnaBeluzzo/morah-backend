@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Morah API — Gestão Condominial
-  version: "2.0.0"
+  version: "2.1.0"
   license:
     name: Proprietary
   description: |
@@ -61,7 +61,7 @@ tags:
   - name: Reservas
     description: Reserva e vistoria de áreas comuns.
   - name: Minha Unidade
-    description: Dados da unidade, vínculos e gestão de inquilinos.
+    description: Dados da unidade, vínculos, gestão de inquilinos e veículos.
   - name: Encomendas
     description: Recebimento, autorização de retirada por terceiros e baixa de encomendas.
   - name: Notificações
@@ -1009,6 +1009,93 @@ paths:
         "403": { $ref: "#/components/responses/Proibido" }
         "404": { $ref: "#/components/responses/NaoEncontrado" }
 
+  /unidades/minha/veiculos:
+    get:
+      tags: [Minha Unidade]
+      summary: Listar os veículos da unidade ativa
+      operationId: listarVeiculosMinhaUnidade
+      security:
+        - bearerAuth: [morador, proprietario]
+      responses:
+        "200":
+          description: Lista de veículos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Veiculo" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/Proibido" }
+    post:
+      tags: [Minha Unidade]
+      summary: Cadastrar um veículo na unidade ativa
+      description: A placa é gravada em maiúsculas e sem hífen, e é única no sistema.
+      operationId: cadastrarVeiculo
+      security:
+        - bearerAuth: [morador, proprietario]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VeiculoCreateRequest" }
+      responses:
+        "201":
+          description: Veículo cadastrado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Veiculo" }
+        "400": { $ref: "#/components/responses/RequisicaoInvalida" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/Proibido" }
+        "409":
+          description: Já existe um veículo com esta placa
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+
+  /unidades/minha/veiculos/{veiculoId}:
+    parameters:
+      - $ref: "#/components/parameters/VeiculoId"
+    patch:
+      tags: [Minha Unidade]
+      summary: Alterar um veículo da unidade ativa
+      description: Só os campos enviados são alterados.
+      operationId: alterarVeiculo
+      security:
+        - bearerAuth: [morador, proprietario]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VeiculoUpdateRequest" }
+      responses:
+        "200":
+          description: Veículo alterado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Veiculo" }
+        "400": { $ref: "#/components/responses/RequisicaoInvalida" }
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/Proibido" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+        "409":
+          description: Já existe um veículo com esta placa
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+    delete:
+      tags: [Minha Unidade]
+      summary: Excluir um veículo da unidade ativa
+      operationId: excluirVeiculo
+      security:
+        - bearerAuth: [morador, proprietario]
+      responses:
+        "204":
+          description: Veículo excluído
+        "401": { $ref: "#/components/responses/NaoAutenticado" }
+        "403": { $ref: "#/components/responses/Proibido" }
+        "404": { $ref: "#/components/responses/NaoEncontrado" }
+
   /unidades/{unidadeId}:
     parameters:
       - $ref: "#/components/parameters/UnidadeId"
@@ -1440,6 +1527,11 @@ components:
       in: path
       required: true
       schema: { type: integer, format: int64 }
+    VeiculoId:
+      name: veiculoId
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
     EncomendaId:
       name: encomendaId
       in: path
@@ -1665,6 +1757,44 @@ components:
         telefone: { type: string }
         contratoInicio: { type: string, format: date }
         contratoFim: { type: string, format: date }
+
+    TipoVeiculo:
+      type: string
+      enum: [carro, moto]
+
+    Veiculo:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        unidadeId: { type: integer, format: int64 }
+        placa: { type: string, example: ABC1D23 }
+        modelo: { type: string, example: Fiat Argo }
+        cor: { type: string, example: Prata }
+        tipo: { $ref: "#/components/schemas/TipoVeiculo" }
+
+    VeiculoCreateRequest:
+      type: object
+      required: [placa, modelo, tipo]
+      properties:
+        placa:
+          type: string
+          description: Formato antigo (ABC1234) ou Mercosul (ABC1D23), com ou sem hífen
+          pattern: "^[A-Za-z]{3}-?[0-9][A-Za-z0-9][0-9]{2}$"
+          example: ABC-1D23
+        modelo: { type: string, maxLength: 60 }
+        cor: { type: string, maxLength: 30 }
+        tipo: { $ref: "#/components/schemas/TipoVeiculo" }
+
+    VeiculoUpdateRequest:
+      type: object
+      description: Todos os campos são opcionais; só os enviados são alterados. `cor` vazia apaga a cor.
+      properties:
+        placa:
+          type: string
+          pattern: "^[A-Za-z]{3}-?[0-9][A-Za-z0-9][0-9]{2}$"
+        modelo: { type: string, minLength: 1, maxLength: 60 }
+        cor: { type: string, maxLength: 30 }
+        tipo: { $ref: "#/components/schemas/TipoVeiculo" }
 
     # ------------------------------------------------ Financeiro
     StatusCobranca:

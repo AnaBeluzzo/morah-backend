@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acesso | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "acesso" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Acesso</h1><small>tabela acesso</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Acesso',
+      recurso: '/api/acesso',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'entrada', coluna: 'entrada', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'saida', coluna: 'saida', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'status', coluna: 'status', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'tipo', coluna: 'tipo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'autorizacaoId', coluna: 'autorizacao_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'visitanteId', coluna: 'visitante_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

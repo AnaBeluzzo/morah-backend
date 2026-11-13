@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vistoria | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "vistoria" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Vistoria</h1><small>tabela vistoria</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Vistoria',
+      recurso: '/api/vistoria',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'dano', coluna: 'dano', tipo: 'int', chave: false, obrigatorio: true },
+        { nome: 'momento', coluna: 'momento', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'observacao', coluna: 'observacao', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'registradaEm', coluna: 'registrada_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'reservaId', coluna: 'reserva_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

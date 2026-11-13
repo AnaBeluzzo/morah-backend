@@ -1,0 +1,15 @@
+/* Gerado por Telosys embedded generator 4.3.0 */
+:root { color-scheme: light dark; --borda: #8884; --destaque: #1F4E79; }
+body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; max-width: 1100px; margin-inline: auto; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+h1 { margin: 0; font-size: 1.5rem; color: var(--destaque); }
+fieldset { border: 1px solid var(--borda); border-radius: 8px; margin-bottom: 16px; }
+.campos { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px 16px; margin-bottom: 12px; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; }
+input { padding: 6px 8px; border: 1px solid var(--borda); border-radius: 6px; font: inherit; }
+button { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--destaque); background: var(--destaque); color: #fff; cursor: pointer; }
+button[type=button], td button { background: transparent; color: inherit; }
+.tabela { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { border-bottom: 1px solid var(--borda); padding: 6px 8px; text-align: left; white-space: nowrap; }
+.indice { columns: 2 240px; padding-left: 20px; line-height: 1.9; }

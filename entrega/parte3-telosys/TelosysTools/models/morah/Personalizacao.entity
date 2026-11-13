@@ -1,0 +1,13 @@
+@DbTable(personalizacao)
+Personalizacao {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  atualizadoEm : string { @DbName(atualizado_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  corDestaque : string { @DbName(cor_destaque) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  corPrimaria : string { @DbName(cor_primaria) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  corSecundaria : string { @DbName(cor_secundaria) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  logoUrl : string { @DbName(logo_url) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  nomeExibicao : string { @DbName(nome_exibicao) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  // links
+}

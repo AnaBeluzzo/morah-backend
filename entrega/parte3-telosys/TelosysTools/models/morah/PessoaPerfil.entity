@@ -1,0 +1,10 @@
+@DbTable(pessoa_perfil)
+PessoaPerfil {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  perfil : string { @DbName(perfil) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  pessoaId : int { @DbName(pessoa_id) @DbType(BIGINT) };
+  unidadeId : int { @DbName(unidade_id) @DbType(BIGINT) };
+  // links
+}

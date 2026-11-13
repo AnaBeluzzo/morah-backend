@@ -19,8 +19,11 @@ spring:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: update
+    properties:
+      # tabelas database first (schema.sql) ficam fora do ddl-auto
+      hibernate.hbm2ddl.schema_filter_provider: br.com.morah.config.FiltroSchemaDatabaseFirst
     open-in-view: true
-    # roda o data.sql depois que o Hibernate cria as tabelas
+    # roda o schema.sql e o data.sql depois que o Hibernate cria as tabelas
     defer-datasource-initialization: true
   sql:
     init:

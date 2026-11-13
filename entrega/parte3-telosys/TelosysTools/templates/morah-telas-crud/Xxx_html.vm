@@ -1,0 +1,31 @@
+## Uma tela de CRUD por entidade (tabela). Os campos vêm do modelo criado a partir do banco.
+#if ( !$entity.hasPrimaryKey() )
+#cancel("Sem chave primária: sem tela de CRUD")
+#end
+#using("REST_API_ROOT")
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${entity.name} | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por $generator.name $generator.version a partir da tabela "${entity.databaseTable}" -->
+  <header><a href="../index.html">← Tabelas</a><h1>${entity.name}</h1><small>tabela ${entity.databaseTable}</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: '${entity.name}',
+      recurso: '$fn.get('REST_API_ROOT','/api')/$entity.tagValue("CollectionName", $fn.toLowerCase($entity.name))',
+      campos: [
+#foreach( $attribute in $entity.attributes )
+        { nome: '${attribute.name}', coluna: '${attribute.databaseName}', tipo: '${attribute.neutralType}', chave: ${attribute.isKeyElement()}, obrigatorio: ${attribute.isNotNull()}#if( $attribute.maxLength != "" ), max: ${attribute.maxLength}#end },
+#end
+      ],
+    });
+  </script>
+</body>
+</html>

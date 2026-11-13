@@ -1,0 +1,15 @@
+@DbTable(encomenda)
+Encomenda {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  codigoRastreio : string { @DbName(codigo_rastreio) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  codigoRetirada : string { @DbName(codigo_retirada) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  fotoUrl : string { @DbName(foto_url) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  recebidaEm : string { @DbName(recebida_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  remetente : string { @DbName(remetente) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  retiradaEm : string { @DbName(retirada_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  transportadora : string { @DbName(transportadora) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  unidadeId : int { @DbName(unidade_id) @DbType(BIGINT) };
+  // links
+}

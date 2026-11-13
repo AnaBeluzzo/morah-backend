@@ -1,0 +1,14 @@
+@DbTable(cobranca)
+Cobranca {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  competencia : string { @DbName(competencia) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  juros : double { @DbName(juros) @DbType(NUMERIC) };
+  multa : double { @DbName(multa) @DbType(NUMERIC) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  valorOriginal : double { @DbName(valor_original) @DbType(NUMERIC) };
+  vencimento : string { @DbName(vencimento) @DbType("DATE(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  taxaId : int { @DbName(taxa_id) @DbType(BIGINT) };
+  unidadeId : int { @DbName(unidade_id) @DbType(BIGINT) };
+  // links
+}

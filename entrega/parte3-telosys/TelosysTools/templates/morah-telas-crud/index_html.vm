@@ -1,0 +1,29 @@
+## Índice com um link para a tela de cada tabela do modelo (só as que têm chave primária)
+#set( $comTela = 0 )
+#foreach( $e in $selectedEntities )
+#if ( $e.hasPrimaryKey() )
+#set( $comTela = $comTela + 1 )
+#end
+#end
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Morah | CRUD gerado do banco</title>
+  <link rel="stylesheet" href="crud.css">
+</head>
+<body>
+  <!-- Gerado por $generator.name $generator.version -->
+  <header><h1>Morah: CRUD gerado do banco</h1><small>$comTela telas para $selectedEntities.size() tabelas do banco · Database First com Telosys</small></header>
+  <main>
+    <ul class="indice">
+#foreach( $e in $selectedEntities )
+#if ( $e.hasPrimaryKey() )
+      <li><a href="telas/${fn.toLowerCase($e.name)}.html">${e.name}</a> <small>${e.databaseTable}</small></li>
+#end
+#end
+    </ul>
+  </main>
+</body>
+</html>

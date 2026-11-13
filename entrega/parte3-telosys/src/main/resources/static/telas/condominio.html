@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Condominio | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "condominio" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Condominio</h1><small>tabela condominio</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Condominio',
+      recurso: '/api/condominio',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'nome', coluna: 'nome', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+      ],
+    });
+  </script>
+</body>
+</html>

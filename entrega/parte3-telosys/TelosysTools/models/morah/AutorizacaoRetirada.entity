@@ -1,0 +1,12 @@
+@DbTable(autorizacao_retirada)
+AutorizacaoRetirada {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  codigo : string { @DbName(codigo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  documento : string { @DbName(documento) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  nomeTerceiro : string { @DbName(nome_terceiro) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  validade : string { @DbName(validade) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  encomendaId : int { @DbName(encomenda_id) @DbType(BIGINT) };
+  // links
+}

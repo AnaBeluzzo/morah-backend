@@ -1,0 +1,13 @@
+@DbTable(area_comum)
+AreaComum {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  capacidade : int { @DbName(capacidade) @DbType(INTEGER) };
+  descricao : string { @DbName(descricao) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  nome : string { @DbName(nome) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  requerReserva : int { @DbName(requer_reserva) @DbType(BOOLEAN) @NotNull @NotEmpty };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  taxa : double { @DbName(taxa) @DbType(NUMERIC) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  // links
+}

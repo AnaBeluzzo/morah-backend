@@ -1,0 +1,11 @@
+@DbTable(pessoa)
+Pessoa {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  cpf : string { @DbName(cpf) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  email : string { @DbName(email) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  nome : string { @DbName(nome) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  senhaHash : string { @DbName(senha_hash) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  telefone : string { @DbName(telefone) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  // links
+}

@@ -4,7 +4,7 @@ Backend do **Morah**, sistema de gestão de condomínios desenvolvido como proje
 do 6º período de Engenharia de Software.
 
 O contrato da API está em [`morah-openapi.yaml`](morah-openapi.yaml) ("Morah API — Gestão
-Condominial", v2.0.0) e é a fonte da verdade: endpoints, campos, códigos HTTP e perfis seguem
+Condominial", v2.1.0) e é a fonte da verdade: endpoints, campos, códigos HTTP e perfis seguem
 exatamente o que está nele.
 
 ## Autores
@@ -66,8 +66,8 @@ Todos com a senha **`demo123`** (no banco fica só o hash BCrypt).
 | `portaria@demo.com.br` | Portaria Central | `portaria` | — |
 
 O seed também tem: a taxa da competência 2026-09 com uma cobrança por unidade, um aviso para o
-condomínio, o "Salão de festas", uma encomenda aguardando retirada e uma autorização de visita
-pendente no Apto 302, a personalização do condomínio e os seis módulos ativos.
+condomínio, o "Salão de festas", uma encomenda aguardando retirada, um carro (placa `ABC1D23`) e uma autorização de
+visita pendente no Apto 302, a personalização do condomínio e os seis módulos ativos.
 
 ## Exemplos com curl
 
@@ -107,7 +107,7 @@ Pacotes em `br.com.morah`:
 | `model.<modulo>` | Entidades JPA, agrupadas por módulo |
 | `dto.<modulo>` | Um `record` por schema de objeto do contrato e um `enum` por schema de enum, agrupados pela seção do contrato |
 | `exception` | `ApiException` e o `GlobalExceptionHandler` (ProblemDetail, RFC 9457) |
-| `config` | `SecurityConfig`, `WebConfig`, `ModuloAtivoInterceptor`, `OpenApiConfig` |
+| `config` | `SecurityConfig`, `WebConfig`, `ModuloAtivoInterceptor`, `OpenApiConfig`, `FiltroSchemaDatabaseFirst` |
 | `security` | `TokenService` (gera o JWT) e `UsuarioLogado` (claims do token) |
 | `pattern.<tipo>.<uso>` | Os design patterns: uma pasta por tipo e uma subpasta por uso (ver abaixo) |
 
@@ -118,7 +118,7 @@ bloco e unidade; só model/repository), `minhaunidade`, `financeiro`, `portaria`
 
 ```
 src/main/java/br/com/morah
-├── config/          SecurityConfig, WebConfig, ModuloAtivoInterceptor, OpenApiConfig
+├── config/          SecurityConfig, WebConfig, ModuloAtivoInterceptor, OpenApiConfig, FiltroSchemaDatabaseFirst
 ├── controller/      AuthController, AvisoController, FinanceiroController, ...
 ├── dto/
 │   ├── avisos/  comum/  dashboard/  encomendas/  financeiro/  login/
@@ -195,6 +195,10 @@ A documentação completa, com os diagramas em Mermaid, está em
 | GET /unidades/{unidadeId} | UnidadeController | buscarUnidade |
 | GET /unidades/{unidadeId}/vinculos/solicitacoes | UnidadeController | buscarSolicitacoesVinculo |
 | PATCH /unidades/{unidadeId}/vinculos/solicitacoes/{solicitacaoId} | UnidadeController | decidirSolicitacaoVinculo |
+| GET /unidades/minha/veiculos | VeiculoController | buscarVeiculos |
+| POST /unidades/minha/veiculos | VeiculoController | criarVeiculo |
+| PATCH /unidades/minha/veiculos/{veiculoId} | VeiculoController | alterarVeiculo |
+| DELETE /unidades/minha/veiculos/{veiculoId} | VeiculoController | deletarVeiculo |
 | GET /encomendas | EncomendaController | buscarEncomendas |
 | POST /encomendas | EncomendaController | criarEncomenda |
 | GET /encomendas/{encomendaId} | EncomendaController | buscarEncomenda |
@@ -244,6 +248,9 @@ O `TokenService` é um `@Service` comum do Spring e não é tratado como pattern
 
 ## Decisões tomadas por simplicidade
 
+- **Database First só nos veículos**: a tabela `veiculo` nasce no `schema.sql` e a entidade é mapeada a
+  partir dela; o `FiltroSchemaDatabaseFirst` tira essa tabela do `ddl-auto`. O resto segue code first.
+  Detalhes em [`docs/database-first-veiculos.md`](docs/database-first-veiculos.md).
 - **Datas no SQLite**: gravadas como texto `yyyy-MM-dd HH:mm:ss.SSS` (parâmetros `date_class=TEXT`
   e `date_string_format` na URL do JDBC), para o `data.sql` ficar legível. Instantes ficam em UTC.
 - **Horários "do dia"** (reservas de 08:00 às 22:00, filtro `data` de acessos e reservas, encomendas

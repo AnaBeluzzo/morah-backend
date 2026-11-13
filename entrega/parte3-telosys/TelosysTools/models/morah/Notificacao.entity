@@ -1,0 +1,13 @@
+@DbTable(notificacao)
+Notificacao {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  enviadaEm : string { @DbName(enviada_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  lidaEm : string { @DbName(lida_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  mensagem : string { @DbName(mensagem) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  referenciaId : int { @DbName(referencia_id) @DbType(BIGINT) };
+  tipo : string { @DbName(tipo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  titulo : string { @DbName(titulo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  pessoaId : int { @DbName(pessoa_id) @DbType(BIGINT) };
+  // links
+}

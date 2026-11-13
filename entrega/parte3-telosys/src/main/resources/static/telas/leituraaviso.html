@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LeituraAviso | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "leitura_aviso" -->
+  <header><a href="../index.html">← Tabelas</a><h1>LeituraAviso</h1><small>tabela leitura_aviso</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'LeituraAviso',
+      recurso: '/api/leituraaviso',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'lidoEm', coluna: 'lido_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'avisoId', coluna: 'aviso_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'pessoaId', coluna: 'pessoa_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

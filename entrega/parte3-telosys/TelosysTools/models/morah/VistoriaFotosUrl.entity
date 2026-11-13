@@ -1,0 +1,7 @@
+@DbTable(vistoria_fotos_url)
+VistoriaFotosUrl {
+  // attributes
+  vistoriaId : int { @DbName(vistoria_id) @DbType(BIGINT) @NotNull @NotEmpty };
+  fotosUrl : string { @DbName(fotos_url) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  // links
+}

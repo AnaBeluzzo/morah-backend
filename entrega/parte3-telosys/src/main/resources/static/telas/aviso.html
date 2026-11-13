@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aviso | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "aviso" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Aviso</h1><small>tabela aviso</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Aviso',
+      recurso: '/api/aviso',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'categoria', coluna: 'categoria', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'conteudo', coluna: 'conteudo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'expiraEm', coluna: 'expira_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'prioridade', coluna: 'prioridade', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'publicadoEm', coluna: 'publicado_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'publicoBlocoId', coluna: 'publico_bloco_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'publicoTipo', coluna: 'publico_tipo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'publicoUnidadeId', coluna: 'publico_unidade_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'titulo', coluna: 'titulo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'autorId', coluna: 'autor_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'condominioId', coluna: 'condominio_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

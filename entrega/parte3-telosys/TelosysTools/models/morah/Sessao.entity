@@ -1,0 +1,12 @@
+@DbTable(sessao)
+Sessao {
+  // attributes
+  id : string { @Id @DbName(id) @DbType("VARCHAR(255)") @NotNull @NotEmpty @Size(255) @MaxLen(255) };
+  perfil : string { @DbName(perfil) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  refreshExpiraEm : string { @DbName(refresh_expira_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  refreshToken : string { @DbName(refresh_token) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  pessoaId : int { @DbName(pessoa_id) @DbType(BIGINT) };
+  unidadeId : int { @DbName(unidade_id) @DbType(BIGINT) };
+  // links
+}

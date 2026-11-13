@@ -1,0 +1,12 @@
+@DbTable(documento_financeiro)
+DocumentoFinanceiro {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  arquivoUrl : string { @DbName(arquivo_url) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  competencia : string { @DbName(competencia) @DbType("DATE(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  publicadoEm : string { @DbName(publicado_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  tipo : string { @DbName(tipo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  titulo : string { @DbName(titulo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  // links
+}

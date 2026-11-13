@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SolicitacaoVinculo | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "solicitacao_vinculo" -->
+  <header><a href="../index.html">← Tabelas</a><h1>SolicitacaoVinculo</h1><small>tabela solicitacao_vinculo</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'SolicitacaoVinculo',
+      recurso: '/api/solicitacaovinculo',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'cpf', coluna: 'cpf', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'nomeSolicitado', coluna: 'nome_solicitado', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'solicitadoEm', coluna: 'solicitado_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'status', coluna: 'status', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'tipoVinculo', coluna: 'tipo_vinculo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'unidadeId', coluna: 'unidade_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ocorrencia | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "ocorrencia" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Ocorrencia</h1><small>tabela ocorrencia</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Ocorrencia',
+      recurso: '/api/ocorrencia',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'abertaEm', coluna: 'aberta_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'descricao', coluna: 'descricao', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'encerradaEm', coluna: 'encerrada_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'status', coluna: 'status', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'titulo', coluna: 'titulo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'condominioId', coluna: 'condominio_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'encomendaId', coluna: 'encomenda_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'reservaId', coluna: 'reserva_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sessao | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "sessao" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Sessao</h1><small>tabela sessao</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Sessao',
+      recurso: '/api/sessao',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'string', chave: true, obrigatorio: true, max: 255 },
+        { nome: 'perfil', coluna: 'perfil', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'refreshExpiraEm', coluna: 'refresh_expira_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'refreshToken', coluna: 'refresh_token', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'condominioId', coluna: 'condominio_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'pessoaId', coluna: 'pessoa_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'unidadeId', coluna: 'unidade_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

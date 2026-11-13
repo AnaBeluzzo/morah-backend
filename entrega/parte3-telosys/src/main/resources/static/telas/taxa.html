@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taxa | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "taxa" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Taxa</h1><small>tabela taxa</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Taxa',
+      recurso: '/api/taxa',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'competencia', coluna: 'competencia', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'descricao', coluna: 'descricao', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'tipoRateio', coluna: 'tipo_rateio', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'valor', coluna: 'valor', tipo: 'double', chave: false, obrigatorio: false },
+        { nome: 'vencimentoDia', coluna: 'vencimento_dia', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'condominioId', coluna: 'condominio_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

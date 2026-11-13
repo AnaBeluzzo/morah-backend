@@ -1,0 +1,12 @@
+@DbTable(acesso)
+Acesso {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  entrada : string { @DbName(entrada) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  saida : string { @DbName(saida) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  tipo : string { @DbName(tipo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  autorizacaoId : int { @DbName(autorizacao_id) @DbType(BIGINT) };
+  visitanteId : int { @DbName(visitante_id) @DbType(BIGINT) };
+  // links
+}

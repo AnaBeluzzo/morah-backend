@@ -1,0 +1,12 @@
+@DbTable(unidade)
+Unidade {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  areaM2 : double { @DbName(area_m2) @DbType(NUMERIC) };
+  fracaoIdeal : double { @DbName(fracao_ideal) @DbType(NUMERIC) };
+  identificacao : string { @DbName(identificacao) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  tipo : string { @DbName(tipo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  blocoId : int { @DbName(bloco_id) @DbType(BIGINT) };
+  // links
+}

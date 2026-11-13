@@ -1,0 +1,7 @@
+@DbTable(condominio)
+Condominio {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  nome : string { @DbName(nome) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  // links
+}

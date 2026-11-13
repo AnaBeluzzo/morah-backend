@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Encomenda | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "encomenda" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Encomenda</h1><small>tabela encomenda</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Encomenda',
+      recurso: '/api/encomenda',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'codigoRastreio', coluna: 'codigo_rastreio', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'codigoRetirada', coluna: 'codigo_retirada', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'fotoUrl', coluna: 'foto_url', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'recebidaEm', coluna: 'recebida_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'remetente', coluna: 'remetente', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'retiradaEm', coluna: 'retirada_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'status', coluna: 'status', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'transportadora', coluna: 'transportadora', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'unidadeId', coluna: 'unidade_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>
