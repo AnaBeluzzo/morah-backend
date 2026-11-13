@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pessoa | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "pessoa" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Pessoa</h1><small>tabela pessoa</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Pessoa',
+      recurso: '/api/pessoa',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'cpf', coluna: 'cpf', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'email', coluna: 'email', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'nome', coluna: 'nome', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'senhaHash', coluna: 'senha_hash', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'telefone', coluna: 'telefone', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+      ],
+    });
+  </script>
+</body>
+</html>

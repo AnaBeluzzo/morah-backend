@@ -1,0 +1,17 @@
+@DbTable(aviso)
+Aviso {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  categoria : string { @DbName(categoria) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  conteudo : string { @DbName(conteudo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  expiraEm : string { @DbName(expira_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  prioridade : string { @DbName(prioridade) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  publicadoEm : string { @DbName(publicado_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  publicoBlocoId : int { @DbName(publico_bloco_id) @DbType(BIGINT) };
+  publicoTipo : string { @DbName(publico_tipo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  publicoUnidadeId : int { @DbName(publico_unidade_id) @DbType(BIGINT) };
+  titulo : string { @DbName(titulo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  autorId : int { @DbName(autor_id) @DbType(BIGINT) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  // links
+}

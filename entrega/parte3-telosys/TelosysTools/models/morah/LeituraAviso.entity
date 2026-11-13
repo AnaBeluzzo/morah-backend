@@ -1,0 +1,9 @@
+@DbTable(leitura_aviso)
+LeituraAviso {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  lidoEm : string { @DbName(lido_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  avisoId : int { @DbName(aviso_id) @DbType(BIGINT) };
+  pessoaId : int { @DbName(pessoa_id) @DbType(BIGINT) };
+  // links
+}

@@ -1,0 +1,11 @@
+@DbTable(veiculo)
+Veiculo {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  unidadeId : int { @DbName(unidade_id) @DbType(INTEGER) @NotNull @NotEmpty };
+  placa : string { @DbName(placa) @DbType("VARCHAR(7)") @NotNull @NotEmpty @Size(7) @MaxLen(7) };
+  modelo : string { @DbName(modelo) @DbType("VARCHAR(60)") @NotNull @NotEmpty @Size(60) @MaxLen(60) };
+  cor : string { @DbName(cor) @DbType("VARCHAR(30)") @Size(30) @MaxLen(30) };
+  tipo : string { @DbName(tipo) @DbType("VARCHAR(10)") @NotNull @NotEmpty @Size(10) @MaxLen(10) };
+  // links
+}

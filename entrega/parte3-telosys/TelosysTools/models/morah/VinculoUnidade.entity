@@ -1,0 +1,12 @@
+@DbTable(vinculo_unidade)
+VinculoUnidade {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  fim : string { @DbName(fim) @DbType("DATE(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  inicio : string { @DbName(inicio) @DbType("DATE(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  principal : int { @DbName(principal) @DbType(BOOLEAN) @NotNull @NotEmpty };
+  tipoVinculo : string { @DbName(tipo_vinculo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  pessoaId : int { @DbName(pessoa_id) @DbType(BIGINT) };
+  unidadeId : int { @DbName(unidade_id) @DbType(BIGINT) };
+  // links
+}

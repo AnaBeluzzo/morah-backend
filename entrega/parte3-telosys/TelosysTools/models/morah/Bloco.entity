@@ -1,0 +1,8 @@
+@DbTable(bloco)
+Bloco {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  nome : string { @DbName(nome) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  // links
+}

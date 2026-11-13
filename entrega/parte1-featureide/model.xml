@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+	<properties/>
+	<struct>
+		<and abstract="true" mandatory="true" name="Morah">
+			<description>Raiz: o sistema de gestão condominial. Abstrata porque só agrupa a linha de produtos.</description>
+			<and mandatory="true" name="Autenticacao">
+				<description>Todo condomínio precisa de login: sem ele nenhum dado é acessível.</description>
+				<feature mandatory="true" name="LoginEmailSenha">
+					<description>POST /auth/login com JWT; é a única forma de entrar no app.</description>
+				</feature>
+				<feature mandatory="true" name="RefreshToken">
+					<description>Renovação rotativa do access token (POST /auth/refresh); sem ela a sessão cai a cada hora.</description>
+				</feature>
+				<feature name="TrocaDeContexto">
+					<description>Só faz sentido para quem tem vínculo com mais de um condomínio ou perfil (POST /auth/contexto).</description>
+				</feature>
+			</and>
+			<or abstract="true" mandatory="true" name="Perfis">
+				<description>Agrupa os papéis de RBAC. Abstrata: o perfil em si não tem código, cada papel tem.</description>
+				<feature name="PerfilMorador">
+					<description>Usa os módulos da própria unidade.</description>
+				</feature>
+				<feature name="PerfilProprietario">
+					<description>Tudo do morador e mais a gestão de inquilinos.</description>
+				</feature>
+				<feature name="PerfilSindico">
+					<description>Administra o condomínio, os módulos e o financeiro.</description>
+				</feature>
+				<feature name="PerfilPortaria">
+					<description>Opera visitantes, encomendas e vistorias.</description>
+				</feature>
+			</or>
+			<feature mandatory="true" name="TelaInicial">
+				<description>Painel por perfil (GET /home/dashboard); é a porta de entrada de todo usuário.</description>
+			</feature>
+			<and mandatory="true" name="Notificacoes">
+				<description>Todos os módulos avisam as pessoas; não pode ser desativado (regra do contrato).</description>
+				<or abstract="true" mandatory="true" name="Canais">
+					<description>Por onde a notificação sai. Abstrata (Strategy CanalNotificacao).</description>
+					<feature name="Push">
+						<description>Notificação interna no app (CanalPush).</description>
+					</feature>
+					<feature name="Email">
+						<description>Envio por e-mail (CanalEmail), simulado com log.</description>
+					</feature>
+				</or>
+				<feature name="MarcarComoLida">
+					<description>Conforto de uso: o produto funciona sem controlar a leitura.</description>
+				</feature>
+			</and>
+			<and mandatory="true" name="Personalizacao">
+				<description>Cada condomínio tem identidade própria; não pode ser desativada.</description>
+				<feature mandatory="true" name="IdentidadeVisual">
+					<description>Nome, logo e cores do condomínio (PATCH /condominio/personalizacao).</description>
+				</feature>
+				<feature mandatory="true" name="ModulosAtivaveis">
+					<description>O síndico liga e desliga módulos (/condominio/modulos); é o mecanismo da variabilidade.</description>
+				</feature>
+			</and>
+			<and abstract="true" mandatory="true" name="Modulos">
+				<description>Agrupa os seis módulos ativáveis. Abstrata: não tem código próprio.</description>
+				<and name="Financeiro">
+					<description>Ativável: há condomínios que usam outra administradora.</description>
+					<feature mandatory="true" name="Cobrancas">
+						<description>Sem cobranças não existe módulo financeiro.</description>
+					</feature>
+					<or abstract="true" mandatory="true" name="Pagamento">
+						<description>Formas de quitar a cobrança. Abstrata (Template Method ProcessamentoPagamento).</description>
+						<feature name="PIX">
+							<description>Copia e cola gerado pelo gateway simulado.</description>
+						</feature>
+						<feature name="BaixaManual">
+							<description>Síndico registra pagamento feito fora do sistema.</description>
+						</feature>
+						<feature name="Webhook">
+							<description>Gateway confirma o pagamento sozinho (HMAC).</description>
+						</feature>
+					</or>
+					<alt abstract="true" mandatory="true" name="Rateio">
+						<description>Regra que divide a taxa entre as unidades. Abstrata (Strategy EstrategiaRateio).</description>
+						<feature name="RateioIgualitario">
+							<description>Mesmo valor para todas as unidades.</description>
+						</feature>
+						<feature name="RateioFracaoIdeal">
+							<description>Valor proporcional à fração ideal da unidade.</description>
+						</feature>
+					</alt>
+					<feature name="DocumentosFinanceiros">
+						<description>Prestação de contas publicada; dispensável num condomínio pequeno.</description>
+					</feature>
+					<feature name="Inadimplencia">
+						<description>Relatório gerencial do síndico; não é necessário para cobrar.</description>
+					</feature>
+				</and>
+				<and name="ModuloPortaria">
+					<description>Ativável: condomínio sem portaria física não usa.</description>
+					<feature mandatory="true" name="AutorizacaoVisita">
+						<description>Núcleo do módulo: o morador autoriza a entrada.</description>
+					</feature>
+					<feature name="ReenvioAutorizacao">
+						<description>Reenviar o pedido ao morador é uma conveniência.</description>
+					</feature>
+					<feature name="HistoricoAcessos">
+						<description>Registro de entradas e saídas; nem todo condomínio audita.</description>
+					</feature>
+				</and>
+				<and name="Avisos">
+					<description>Ativável: o condomínio pode usar outro canal (ex.: mural físico).</description>
+					<feature mandatory="true" name="Mural">
+						<description>Lista de avisos vigentes; sem ele não há módulo.</description>
+					</feature>
+					<or abstract="true" mandatory="true" name="PublicoAlvo">
+						<description>Para quem o aviso vai. Abstrata: é só a escolha do alcance.</description>
+						<feature name="AvisoCondominio">
+							<description>Aviso para todas as unidades.</description>
+						</feature>
+						<feature name="AvisoBloco">
+							<description>Aviso para um bloco.</description>
+						</feature>
+						<feature name="AvisoUnidade">
+							<description>Aviso para uma unidade.</description>
+						</feature>
+					</or>
+					<feature name="ConfirmacaoLeitura">
+						<description>Saber quem leu é útil, mas o aviso funciona sem isso.</description>
+					</feature>
+				</and>
+				<and name="Reservas">
+					<description>Ativável: condomínio sem área comum não usa.</description>
+					<feature mandatory="true" name="AreasComuns">
+						<description>Cadastro das áreas reserváveis.</description>
+					</feature>
+					<feature mandatory="true" name="Disponibilidade">
+						<description>Grade de horários; sem ela haveria reservas sobrepostas.</description>
+					</feature>
+					<feature name="TaxaDeReserva">
+						<description>Cobrar pelo uso da área é decisão do condomínio.</description>
+					</feature>
+					<feature name="Vistoria">
+						<description>Checagem de entrada e saída com registro de dano; opcional.</description>
+					</feature>
+				</and>
+				<and name="MinhaUnidade">
+					<description>Ativável: o síndico pode cadastrar moradores fora do app.</description>
+					<feature mandatory="true" name="DadosUnidade">
+						<description>Dados da unidade do contexto ativo.</description>
+					</feature>
+					<feature mandatory="true" name="Vinculos">
+						<description>Quem mora ou é dono da unidade.</description>
+					</feature>
+					<feature name="SolicitacaoVinculo">
+						<description>Pedido de novo morador com aprovação do síndico.</description>
+					</feature>
+					<feature name="Inquilinos">
+						<description>Só existe onde há locação.</description>
+					</feature>
+					<feature name="Veiculos">
+						<description>Cadastro de veículos (tabela database first); nem todo condomínio tem garagem.</description>
+					</feature>
+				</and>
+				<and name="Encomendas">
+					<description>Ativável: condomínio sem recebimento de pacotes não usa.</description>
+					<feature mandatory="true" name="Recebimento">
+						<description>Portaria registra o pacote; é o núcleo do módulo.</description>
+					</feature>
+					<feature mandatory="true" name="RetiradaPorCodigo">
+						<description>Código de 6 dígitos garante a entrega à pessoa certa.</description>
+					</feature>
+					<feature name="AutorizacaoTerceiro">
+						<description>Morador autoriza outra pessoa a retirar.</description>
+					</feature>
+					<feature name="Extravio">
+						<description>Abertura de ocorrência quando o pacote some.</description>
+					</feature>
+				</and>
+			</and>
+			<and abstract="true" mandatory="true" name="Plataforma">
+				<description>Decisões de infraestrutura do produto. Abstrata.</description>
+				<alt abstract="true" mandatory="true" name="BancoDeDados">
+					<description>Exatamente um banco por instalação. Abstrata.</description>
+					<feature name="SQLite">
+						<description>Arquivo local: ideal para demonstração e condomínio pequeno.</description>
+					</feature>
+					<feature name="PostgreSQL">
+						<description>Servidor de banco para produção com vários acessos simultâneos.</description>
+					</feature>
+				</alt>
+				<or abstract="true" mandatory="true" name="Interface">
+					<description>Como o usuário acessa a API. Abstrata.</description>
+					<feature name="AppMobileWeb">
+						<description>Front React mobile-first (morah-frontend).</description>
+					</feature>
+					<feature name="SwaggerUI">
+						<description>Documentação navegável da API (springdoc).</description>
+					</feature>
+				</or>
+				<feature name="MultiplasInstancias">
+					<description>Escalar horizontalmente; só necessário em condomínios grandes ou SaaS.</description>
+				</feature>
+			</and>
+		</and>
+	</struct>
+	<constraints>
+		<rule>
+			<description>Proprietário é cumulativo a morador: tem tudo o que o morador tem (regra de RBAC do contrato).</description>
+			<imp>
+				<var>PerfilProprietario</var>
+				<var>PerfilMorador</var>
+			</imp>
+		</rule>
+		<rule>
+			<description>Só o proprietário cadastra inquilino, e o convite de acesso vai por e-mail.</description>
+			<imp>
+				<var>Inquilinos</var>
+				<conj>
+					<var>PerfilProprietario</var>
+					<var>Email</var>
+				</conj>
+			</imp>
+		</rule>
+		<rule>
+			<description>Sem o perfil portaria ninguém registraria visitantes.</description>
+			<imp>
+				<var>ModuloPortaria</var>
+				<var>PerfilPortaria</var>
+			</imp>
+		</rule>
+		<rule>
+			<description>Quem recebe e entrega os pacotes é a portaria.</description>
+			<imp>
+				<var>Encomendas</var>
+				<var>PerfilPortaria</var>
+			</imp>
+		</rule>
+		<rule>
+			<description>A vistoria da área comum é registrada pela portaria.</description>
+			<imp>
+				<var>Vistoria</var>
+				<var>PerfilPortaria</var>
+			</imp>
+		</rule>
+		<rule>
+			<description>O webhook do gateway confirma pagamentos PIX; sem PIX ele não tem o que receber.</description>
+			<imp>
+				<var>Webhook</var>
+				<var>PIX</var>
+			</imp>
+		</rule>
+		<rule>
+			<description>Relatório de inadimplência e aprovação de vínculos são tarefas do síndico.</description>
+			<imp>
+				<disj>
+					<var>Inadimplencia</var>
+					<var>SolicitacaoVinculo</var>
+				</disj>
+				<var>PerfilSindico</var>
+			</imp>
+		</rule>
+		<rule>
+			<description>Só o síndico liga e desliga módulos; como ModulosAtivaveis é obrigatória, todo produto tem síndico.</description>
+			<imp>
+				<var>ModulosAtivaveis</var>
+				<var>PerfilSindico</var>
+			</imp>
+		</rule>
+		<rule>
+			<description>Cobrar a reserva gera cobrança, que só existe com o módulo financeiro.</description>
+			<imp>
+				<var>TaxaDeReserva</var>
+				<var>Financeiro</var>
+			</imp>
+		</rule>
+		<rule>
+			<description>SQLite é um arquivo local com um escritor por vez: não serve para várias instâncias.</description>
+			<imp>
+				<var>MultiplasInstancias</var>
+				<not>
+					<var>SQLite</var>
+				</not>
+			</imp>
+		</rule>
+		<rule>
+			<description>O morador autoriza o terceiro e a portaria confere o código na retirada.</description>
+			<imp>
+				<var>AutorizacaoTerceiro</var>
+				<conj>
+					<var>PerfilMorador</var>
+					<var>PerfilPortaria</var>
+				</conj>
+			</imp>
+		</rule>
+		<rule>
+			<description>O painel mostra dados dos módulos: sem nenhum módulo ativo ele ficaria vazio.</description>
+			<imp>
+				<var>TelaInicial</var>
+				<disj>
+					<var>Financeiro</var>
+					<var>ModuloPortaria</var>
+					<var>Avisos</var>
+					<var>Reservas</var>
+					<var>MinhaUnidade</var>
+					<var>Encomendas</var>
+				</disj>
+			</imp>
+		</rule>
+		<rule>
+			<description>Veículos são cadastrados pelas pessoas da unidade (morador ou proprietário).</description>
+			<imp>
+				<var>Veiculos</var>
+				<disj>
+					<var>PerfilMorador</var>
+					<var>PerfilProprietario</var>
+				</disj>
+			</imp>
+		</rule>
+	</constraints>
+</featureModel>

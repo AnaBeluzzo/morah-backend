@@ -1,0 +1,5 @@
+target/
+morah-demo.db
+TelosysTools/downloads/
+*.jar
+.DS_Store

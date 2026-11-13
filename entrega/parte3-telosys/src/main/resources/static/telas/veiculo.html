@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Veiculo | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "veiculo" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Veiculo</h1><small>tabela veiculo</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Veiculo',
+      recurso: '/api/veiculo',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'unidadeId', coluna: 'unidade_id', tipo: 'int', chave: false, obrigatorio: true },
+        { nome: 'placa', coluna: 'placa', tipo: 'string', chave: false, obrigatorio: true, max: 7 },
+        { nome: 'modelo', coluna: 'modelo', tipo: 'string', chave: false, obrigatorio: true, max: 60 },
+        { nome: 'cor', coluna: 'cor', tipo: 'string', chave: false, obrigatorio: false, max: 30 },
+        { nome: 'tipo', coluna: 'tipo', tipo: 'string', chave: false, obrigatorio: true, max: 10 },
+      ],
+    });
+  </script>
+</body>
+</html>

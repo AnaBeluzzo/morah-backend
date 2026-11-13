@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notificacao | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "notificacao" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Notificacao</h1><small>tabela notificacao</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Notificacao',
+      recurso: '/api/notificacao',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'enviadaEm', coluna: 'enviada_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'lidaEm', coluna: 'lida_em', tipo: 'string', chave: false, obrigatorio: false, max: 2000000000 },
+        { nome: 'mensagem', coluna: 'mensagem', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'referenciaId', coluna: 'referencia_id', tipo: 'int', chave: false, obrigatorio: false },
+        { nome: 'tipo', coluna: 'tipo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'titulo', coluna: 'titulo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'pessoaId', coluna: 'pessoa_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

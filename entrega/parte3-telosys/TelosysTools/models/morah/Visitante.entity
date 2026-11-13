@@ -1,0 +1,11 @@
+@DbTable(visitante)
+Visitante {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  documento : string { @DbName(documento) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  nome : string { @DbName(nome) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  observacao : string { @DbName(observacao) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  telefone : string { @DbName(telefone) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  // links
+}

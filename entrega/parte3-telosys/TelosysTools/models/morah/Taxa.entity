@@ -1,0 +1,12 @@
+@DbTable(taxa)
+Taxa {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  competencia : string { @DbName(competencia) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  descricao : string { @DbName(descricao) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  tipoRateio : string { @DbName(tipo_rateio) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  valor : double { @DbName(valor) @DbType(NUMERIC) };
+  vencimentoDia : int { @DbName(vencimento_dia) @DbType(INTEGER) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  // links
+}

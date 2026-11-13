@@ -1,0 +1,14 @@
+@DbTable(ocorrencia)
+Ocorrencia {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  abertaEm : string { @DbName(aberta_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  descricao : string { @DbName(descricao) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  encerradaEm : string { @DbName(encerrada_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  titulo : string { @DbName(titulo) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  condominioId : int { @DbName(condominio_id) @DbType(BIGINT) };
+  encomendaId : int { @DbName(encomenda_id) @DbType(BIGINT) };
+  reservaId : int { @DbName(reserva_id) @DbType(BIGINT) };
+  // links
+}

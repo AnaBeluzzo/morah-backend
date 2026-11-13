@@ -1,0 +1,599 @@
+{
+  "caracteristicas": [
+    {
+      "nome": "Morah",
+      "pai": "",
+      "tipo": "Abstract",
+      "relacao": "Raiz",
+      "grupoDosFilhos": "And",
+      "por_que": "Raiz: o sistema de gestão condominial. Abstrata porque só agrupa a linha de produtos."
+    },
+    {
+      "nome": "Autenticacao",
+      "pai": "Morah",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "And",
+      "por_que": "Todo condomínio precisa de login: sem ele nenhum dado é acessível."
+    },
+    {
+      "nome": "LoginEmailSenha",
+      "pai": "Autenticacao",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "POST /auth/login com JWT; é a única forma de entrar no app."
+    },
+    {
+      "nome": "RefreshToken",
+      "pai": "Autenticacao",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Renovação rotativa do access token (POST /auth/refresh); sem ela a sessão cai a cada hora."
+    },
+    {
+      "nome": "TrocaDeContexto",
+      "pai": "Autenticacao",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Só faz sentido para quem tem vínculo com mais de um condomínio ou perfil (POST /auth/contexto)."
+    },
+    {
+      "nome": "Perfis",
+      "pai": "Morah",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "Or",
+      "por_que": "Agrupa os papéis de RBAC. Abstrata: o perfil em si não tem código, cada papel tem."
+    },
+    {
+      "nome": "PerfilMorador",
+      "pai": "Perfis",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Usa os módulos da própria unidade."
+    },
+    {
+      "nome": "PerfilProprietario",
+      "pai": "Perfis",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Tudo do morador e mais a gestão de inquilinos."
+    },
+    {
+      "nome": "PerfilSindico",
+      "pai": "Perfis",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Administra o condomínio, os módulos e o financeiro."
+    },
+    {
+      "nome": "PerfilPortaria",
+      "pai": "Perfis",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Opera visitantes, encomendas e vistorias."
+    },
+    {
+      "nome": "TelaInicial",
+      "pai": "Morah",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Painel por perfil (GET /home/dashboard); é a porta de entrada de todo usuário."
+    },
+    {
+      "nome": "Notificacoes",
+      "pai": "Morah",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "And",
+      "por_que": "Todos os módulos avisam as pessoas; não pode ser desativado (regra do contrato)."
+    },
+    {
+      "nome": "Canais",
+      "pai": "Notificacoes",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "Or",
+      "por_que": "Por onde a notificação sai. Abstrata (Strategy CanalNotificacao)."
+    },
+    {
+      "nome": "Push",
+      "pai": "Canais",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Notificação interna no app (CanalPush)."
+    },
+    {
+      "nome": "Email",
+      "pai": "Canais",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Envio por e-mail (CanalEmail), simulado com log."
+    },
+    {
+      "nome": "MarcarComoLida",
+      "pai": "Notificacoes",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Conforto de uso: o produto funciona sem controlar a leitura."
+    },
+    {
+      "nome": "Personalizacao",
+      "pai": "Morah",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "And",
+      "por_que": "Cada condomínio tem identidade própria; não pode ser desativada."
+    },
+    {
+      "nome": "IdentidadeVisual",
+      "pai": "Personalizacao",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Nome, logo e cores do condomínio (PATCH /condominio/personalizacao)."
+    },
+    {
+      "nome": "ModulosAtivaveis",
+      "pai": "Personalizacao",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "O síndico liga e desliga módulos (/condominio/modulos); é o mecanismo da variabilidade."
+    },
+    {
+      "nome": "Modulos",
+      "pai": "Morah",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "And",
+      "por_que": "Agrupa os seis módulos ativáveis. Abstrata: não tem código próprio."
+    },
+    {
+      "nome": "Financeiro",
+      "pai": "Modulos",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "And",
+      "por_que": "Ativável: há condomínios que usam outra administradora."
+    },
+    {
+      "nome": "Cobrancas",
+      "pai": "Financeiro",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Sem cobranças não existe módulo financeiro."
+    },
+    {
+      "nome": "Pagamento",
+      "pai": "Financeiro",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "Or",
+      "por_que": "Formas de quitar a cobrança. Abstrata (Template Method ProcessamentoPagamento)."
+    },
+    {
+      "nome": "PIX",
+      "pai": "Pagamento",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Copia e cola gerado pelo gateway simulado."
+    },
+    {
+      "nome": "BaixaManual",
+      "pai": "Pagamento",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Síndico registra pagamento feito fora do sistema."
+    },
+    {
+      "nome": "Webhook",
+      "pai": "Pagamento",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Gateway confirma o pagamento sozinho (HMAC)."
+    },
+    {
+      "nome": "Rateio",
+      "pai": "Financeiro",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "Alternative",
+      "por_que": "Regra que divide a taxa entre as unidades. Abstrata (Strategy EstrategiaRateio)."
+    },
+    {
+      "nome": "RateioIgualitario",
+      "pai": "Rateio",
+      "tipo": "Concrete",
+      "relacao": "Alternative Group",
+      "grupoDosFilhos": "",
+      "por_que": "Mesmo valor para todas as unidades."
+    },
+    {
+      "nome": "RateioFracaoIdeal",
+      "pai": "Rateio",
+      "tipo": "Concrete",
+      "relacao": "Alternative Group",
+      "grupoDosFilhos": "",
+      "por_que": "Valor proporcional à fração ideal da unidade."
+    },
+    {
+      "nome": "DocumentosFinanceiros",
+      "pai": "Financeiro",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Prestação de contas publicada; dispensável num condomínio pequeno."
+    },
+    {
+      "nome": "Inadimplencia",
+      "pai": "Financeiro",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Relatório gerencial do síndico; não é necessário para cobrar."
+    },
+    {
+      "nome": "ModuloPortaria",
+      "pai": "Modulos",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "And",
+      "por_que": "Ativável: condomínio sem portaria física não usa."
+    },
+    {
+      "nome": "AutorizacaoVisita",
+      "pai": "ModuloPortaria",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Núcleo do módulo: o morador autoriza a entrada."
+    },
+    {
+      "nome": "ReenvioAutorizacao",
+      "pai": "ModuloPortaria",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Reenviar o pedido ao morador é uma conveniência."
+    },
+    {
+      "nome": "HistoricoAcessos",
+      "pai": "ModuloPortaria",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Registro de entradas e saídas; nem todo condomínio audita."
+    },
+    {
+      "nome": "Avisos",
+      "pai": "Modulos",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "And",
+      "por_que": "Ativável: o condomínio pode usar outro canal (ex.: mural físico)."
+    },
+    {
+      "nome": "Mural",
+      "pai": "Avisos",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Lista de avisos vigentes; sem ele não há módulo."
+    },
+    {
+      "nome": "PublicoAlvo",
+      "pai": "Avisos",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "Or",
+      "por_que": "Para quem o aviso vai. Abstrata: é só a escolha do alcance."
+    },
+    {
+      "nome": "AvisoCondominio",
+      "pai": "PublicoAlvo",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Aviso para todas as unidades."
+    },
+    {
+      "nome": "AvisoBloco",
+      "pai": "PublicoAlvo",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Aviso para um bloco."
+    },
+    {
+      "nome": "AvisoUnidade",
+      "pai": "PublicoAlvo",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Aviso para uma unidade."
+    },
+    {
+      "nome": "ConfirmacaoLeitura",
+      "pai": "Avisos",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Saber quem leu é útil, mas o aviso funciona sem isso."
+    },
+    {
+      "nome": "Reservas",
+      "pai": "Modulos",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "And",
+      "por_que": "Ativável: condomínio sem área comum não usa."
+    },
+    {
+      "nome": "AreasComuns",
+      "pai": "Reservas",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Cadastro das áreas reserváveis."
+    },
+    {
+      "nome": "Disponibilidade",
+      "pai": "Reservas",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Grade de horários; sem ela haveria reservas sobrepostas."
+    },
+    {
+      "nome": "TaxaDeReserva",
+      "pai": "Reservas",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Cobrar pelo uso da área é decisão do condomínio."
+    },
+    {
+      "nome": "Vistoria",
+      "pai": "Reservas",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Checagem de entrada e saída com registro de dano; opcional."
+    },
+    {
+      "nome": "MinhaUnidade",
+      "pai": "Modulos",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "And",
+      "por_que": "Ativável: o síndico pode cadastrar moradores fora do app."
+    },
+    {
+      "nome": "DadosUnidade",
+      "pai": "MinhaUnidade",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Dados da unidade do contexto ativo."
+    },
+    {
+      "nome": "Vinculos",
+      "pai": "MinhaUnidade",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Quem mora ou é dono da unidade."
+    },
+    {
+      "nome": "SolicitacaoVinculo",
+      "pai": "MinhaUnidade",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Pedido de novo morador com aprovação do síndico."
+    },
+    {
+      "nome": "Inquilinos",
+      "pai": "MinhaUnidade",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Só existe onde há locação."
+    },
+    {
+      "nome": "Veiculos",
+      "pai": "MinhaUnidade",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Cadastro de veículos (tabela database first); nem todo condomínio tem garagem."
+    },
+    {
+      "nome": "Encomendas",
+      "pai": "Modulos",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "And",
+      "por_que": "Ativável: condomínio sem recebimento de pacotes não usa."
+    },
+    {
+      "nome": "Recebimento",
+      "pai": "Encomendas",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Portaria registra o pacote; é o núcleo do módulo."
+    },
+    {
+      "nome": "RetiradaPorCodigo",
+      "pai": "Encomendas",
+      "tipo": "Concrete",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "",
+      "por_que": "Código de 6 dígitos garante a entrega à pessoa certa."
+    },
+    {
+      "nome": "AutorizacaoTerceiro",
+      "pai": "Encomendas",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Morador autoriza outra pessoa a retirar."
+    },
+    {
+      "nome": "Extravio",
+      "pai": "Encomendas",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Abertura de ocorrência quando o pacote some."
+    },
+    {
+      "nome": "Plataforma",
+      "pai": "Morah",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "And",
+      "por_que": "Decisões de infraestrutura do produto. Abstrata."
+    },
+    {
+      "nome": "BancoDeDados",
+      "pai": "Plataforma",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "Alternative",
+      "por_que": "Exatamente um banco por instalação. Abstrata."
+    },
+    {
+      "nome": "SQLite",
+      "pai": "BancoDeDados",
+      "tipo": "Concrete",
+      "relacao": "Alternative Group",
+      "grupoDosFilhos": "",
+      "por_que": "Arquivo local: ideal para demonstração e condomínio pequeno."
+    },
+    {
+      "nome": "PostgreSQL",
+      "pai": "BancoDeDados",
+      "tipo": "Concrete",
+      "relacao": "Alternative Group",
+      "grupoDosFilhos": "",
+      "por_que": "Servidor de banco para produção com vários acessos simultâneos."
+    },
+    {
+      "nome": "Interface",
+      "pai": "Plataforma",
+      "tipo": "Abstract",
+      "relacao": "Mandatory",
+      "grupoDosFilhos": "Or",
+      "por_que": "Como o usuário acessa a API. Abstrata."
+    },
+    {
+      "nome": "AppMobileWeb",
+      "pai": "Interface",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Front React mobile-first (morah-frontend)."
+    },
+    {
+      "nome": "SwaggerUI",
+      "pai": "Interface",
+      "tipo": "Concrete",
+      "relacao": "Or Group",
+      "grupoDosFilhos": "",
+      "por_que": "Documentação navegável da API (springdoc)."
+    },
+    {
+      "nome": "MultiplasInstancias",
+      "pai": "Plataforma",
+      "tipo": "Concrete",
+      "relacao": "Optional",
+      "grupoDosFilhos": "",
+      "por_que": "Escalar horizontalmente; só necessário em condomínios grandes ou SaaS."
+    }
+  ],
+  "restricoes": [
+    {
+      "id": "C1",
+      "expr": "PerfilProprietario ⇒ PerfilMorador",
+      "por_que": "Proprietário é cumulativo a morador: tem tudo o que o morador tem (regra de RBAC do contrato)."
+    },
+    {
+      "id": "C2",
+      "expr": "Inquilinos ⇒ (PerfilProprietario ∧ Email)",
+      "por_que": "Só o proprietário cadastra inquilino, e o convite de acesso vai por e-mail."
+    },
+    {
+      "id": "C3",
+      "expr": "ModuloPortaria ⇒ PerfilPortaria",
+      "por_que": "Sem o perfil portaria ninguém registraria visitantes."
+    },
+    {
+      "id": "C4",
+      "expr": "Encomendas ⇒ PerfilPortaria",
+      "por_que": "Quem recebe e entrega os pacotes é a portaria."
+    },
+    {
+      "id": "C5",
+      "expr": "Vistoria ⇒ PerfilPortaria",
+      "por_que": "A vistoria da área comum é registrada pela portaria."
+    },
+    {
+      "id": "C6",
+      "expr": "Webhook ⇒ PIX",
+      "por_que": "O webhook do gateway confirma pagamentos PIX; sem PIX ele não tem o que receber."
+    },
+    {
+      "id": "C7",
+      "expr": "(Inadimplencia ∨ SolicitacaoVinculo) ⇒ PerfilSindico",
+      "por_que": "Relatório de inadimplência e aprovação de vínculos são tarefas do síndico."
+    },
+    {
+      "id": "C8",
+      "expr": "ModulosAtivaveis ⇒ PerfilSindico",
+      "por_que": "Só o síndico liga e desliga módulos; como ModulosAtivaveis é obrigatória, todo produto tem síndico."
+    },
+    {
+      "id": "C9",
+      "expr": "TaxaDeReserva ⇒ Financeiro",
+      "por_que": "Cobrar a reserva gera cobrança, que só existe com o módulo financeiro."
+    },
+    {
+      "id": "C10",
+      "expr": "MultiplasInstancias ⇒ ¬SQLite",
+      "por_que": "SQLite é um arquivo local com um escritor por vez: não serve para várias instâncias."
+    },
+    {
+      "id": "C11",
+      "expr": "AutorizacaoTerceiro ⇒ (PerfilMorador ∧ PerfilPortaria)",
+      "por_que": "O morador autoriza o terceiro e a portaria confere o código na retirada."
+    },
+    {
+      "id": "C12",
+      "expr": "TelaInicial ⇒ (Financeiro ∨ ModuloPortaria ∨ Avisos ∨ Reservas ∨ MinhaUnidade ∨ Encomendas)",
+      "por_que": "O painel mostra dados dos módulos: sem nenhum módulo ativo ele ficaria vazio."
+    },
+    {
+      "id": "C13",
+      "expr": "Veiculos ⇒ (PerfilMorador ∨ PerfilProprietario)",
+      "por_que": "Veículos são cadastrados pelas pessoas da unidade (morador ou proprietário)."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+@DbTable(vistoria)
+Vistoria {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  dano : int { @DbName(dano) @DbType(BOOLEAN) @NotNull @NotEmpty };
+  momento : string { @DbName(momento) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  observacao : string { @DbName(observacao) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  registradaEm : string { @DbName(registrada_em) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  reservaId : int { @DbName(reserva_id) @DbType(BIGINT) };
+  // links
+}

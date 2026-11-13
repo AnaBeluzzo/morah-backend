@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unidade | CRUD gerado</title>
+  <link rel="stylesheet" href="../crud.css">
+</head>
+<body>
+  <!-- Gerado por Telosys embedded generator 4.3.0 a partir da tabela "unidade" -->
+  <header><a href="../index.html">← Tabelas</a><h1>Unidade</h1><small>tabela unidade</small></header>
+  <main id="crud"></main>
+  <script src="../crud.js"></script>
+  <script>
+    montarCrud({
+      titulo: 'Unidade',
+      recurso: '/api/unidade',
+      campos: [
+        { nome: 'id', coluna: 'id', tipo: 'int', chave: true, obrigatorio: true },
+        { nome: 'areaM2', coluna: 'area_m2', tipo: 'double', chave: false, obrigatorio: false },
+        { nome: 'fracaoIdeal', coluna: 'fracao_ideal', tipo: 'double', chave: false, obrigatorio: false },
+        { nome: 'identificacao', coluna: 'identificacao', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'status', coluna: 'status', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'tipo', coluna: 'tipo', tipo: 'string', chave: false, obrigatorio: false, max: 255 },
+        { nome: 'blocoId', coluna: 'bloco_id', tipo: 'int', chave: false, obrigatorio: false },
+      ],
+    });
+  </script>
+</body>
+</html>

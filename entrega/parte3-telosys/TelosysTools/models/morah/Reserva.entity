@@ -1,0 +1,13 @@
+@DbTable(reserva)
+Reserva {
+  // attributes
+  id : int { @Id @DbName(id) @DbType(INTEGER) };
+  fim : string { @DbName(fim) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  inicio : string { @DbName(inicio) @DbType("TIMESTAMP(2000000000)") @Size(2000000000) @MaxLen(2000000000) };
+  status : string { @DbName(status) @DbType("VARCHAR(255)") @Size(255) @MaxLen(255) };
+  valor : double { @DbName(valor) @DbType(NUMERIC) };
+  areaComumId : int { @DbName(area_comum_id) @DbType(BIGINT) };
+  solicitanteId : int { @DbName(solicitante_id) @DbType(BIGINT) };
+  unidadeId : int { @DbName(unidade_id) @DbType(BIGINT) };
+  // links
+}
